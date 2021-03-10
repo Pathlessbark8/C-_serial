@@ -54,15 +54,15 @@ std::vector<int> interior_points_index;
 std::vector<int> shape_points_index;
 
 // iterations
-int it, itr;
+int it, itr=3;
 
 // Flag for time stepping
-int rks;
-double euler;
+int rks=1;
+double euler=2.0;
 double total_loss_stagpressure;
-double res_old, res_new, residue, max_res;
-double gsum_res_sqr, sum_res_sqr;
-int max_res_point;
+double res_old=0, res_new=0, residue, max_res=0;
+double gsum_res_sqr=0, sum_res_sqr=0;
+int max_res_point=0;
 std::vector<double> Cl, Cd, Cm, cfv, ClCd, vector_cost_func;
 double total_entropy, total_enstrophy;
 int plen;
@@ -71,7 +71,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL;
 
-int max_iters;
+int max_iters=1;
 
 // Unsteady variables
 double t, tfinal, dtg;
@@ -87,15 +87,15 @@ int runop;
 //    power = -2.0 => weights = 1/d^2
 //    power = -4.0 => weights = 1/d^4
 
-double power;
+double power=0;
 
 //    limiter_flag = 1 => venkatakrishnan limiter
 //    limiter_flag = 2 => min-max limiter
 
 int limiter_flag;
-double VL_CONST; // Venkatakrishnan limiter constant ..
+double VL_CONST=150; // Venkatakrishnan limiter constant ..
 
-int restart;
+int restart=0;
 
 //    Interior points normal flag ..
 //    If flag is zero => nx = 0.0 and ny = 1.0
@@ -150,3 +150,4 @@ void allocate_soln()
     // ClCd = std::vector<double>(shapes+1);
     // vector_cost_func = std::vector<double>(shapes+1);
 }
+

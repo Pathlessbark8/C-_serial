@@ -1,6 +1,7 @@
 #pragma once
 #include "data_structure_mod.h"
 #include <math.h>
+#include<iostream>
 
 void eval_q_variables()
 {
@@ -44,6 +45,7 @@ void eval_q_derivatives()
 
     for (int i = 1; i <= local_points; i++)
     {
+        
 
         x_i = point.x[i];
         y_i = point.y[i];

@@ -25,23 +25,45 @@ int main()
     point.nbhs = std::vector<int>(max_points + 1);
     point.min_dist = std::vector<double>(max_points + 1);
     point.conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
-    for (int i = 1; i <= 4; i++)
+    point.nx = std::vector<double>(max_points + 1);
+    point.ny = std::vector<double>(max_points + 1);
+    for (int i = 1; i <= max_points; i++)
     {
         fin >> point.x[i] >> point.y[i] >> point.left[i] >> point.right[i] >> point.flag_1[i] >> point.flag_2[i] >> point.min_dist[i] >> point.nbhs[i];
         for (int r = 1; r <= point.nbhs[i]; r++)
         {
             fin >> point.conn[i][r];
         }
+        if (point.flag_1[i] == 0)
+        {
+            wall_points = wall_points + 1;
+            wall_points_index.push_back(i);
+        }
+        else if (point.flag_1[i] == 1)
+        {
+            interior_points = interior_points + 1;
+            interior_points_index.push_back(i);
+        }
+        else if (point.flag_1[i] == 2)
+        {
+            outer_points = outer_points + 1;
+            outer_points_index.push_back(i);
+        }
+
+        if (point.flag_2[i] > 0)
+        {
+            shape_points = shape_points + 1;
+        }
         // cout << point.x[i] << " " << point.y[i] << " " << point.left[i] << " " << point.right[i] << " " << point.flag_1[i] << " " << point.flag_2[i] << " " << point.min_dist[i] << " " << point.nbhs[i] << endl;
     }
     allocate_soln();
     local_points = max_points;
+    compute_normals();
+    generate_connectivity();
     initial_conditions();
-    if (runop == 1)
-    {
-        q_lskum();
-    }
-    print_primal_output();
+    q_lskum();
+
+    // print_primal_output();
     //    cout<<local_points<<endl;
     // double arr[5];
     // double t_nx, t_ny, t_u1,t_u2, t_rho,t_pr;

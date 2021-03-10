@@ -3,13 +3,24 @@
 #include "data_structure_mod.h"
 #include "flux_residual_mod.h"
 #include <vector>
+#include <iostream>
+
+std::vector<double> return_column(std::vector<std::vector<double>> a, int k)
+{
+    std::vector<double> temp;
+    for (int i = 1; i <= 4; i++)
+    {
+        temp.push_back(a[i][k]);
+    }
+    return temp;
+}
 
 void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std::vector<double> U)
 {
 
     double rho;
     double temp1, temp2;
-
+    // std::cout << prim.size() << " " << U.size() << " " << rho << std::endl;
     rho = prim[1];
 
     U[1] = rho;
@@ -94,126 +105,36 @@ void state_update(int rk)
 
     max_res = 0.0;
     sum_res_sqr = 0.0;
-
-    for (i = 1; i <= wall_points; i++)
+    for (i = 1; i <= max_points; i++)
     {
-        k = wall_points_index[i];
-
-        nx = point.nx[k];
-        ny = point.ny[k];
-        primitive_to_conserved(point.prim[k], nx, ny, U);
-        primitive_to_conserved(point.prim_old[k], nx, ny, U_old);
-
-        temp = U[1];
-
-        if (rk != 3)
+        if (point.flag_1[i] == 0)
         {
-            for (int j = 1; j <= 4; j++)
+            k = i;
+
+            nx = point.nx[k];
+            ny = point.ny[k];
+            primitive_to_conserved(return_column(point.prim, k), nx, ny, U);
+            primitive_to_conserved(return_column(point.prim, k), nx, ny, U_old);
+
+            temp = U[1];
+
+            if (rk != 3)
             {
-                U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+                }
             }
-        }
-        else
+            else
 
-        {
-            for (int j = 1; j <= 4; j++)
             {
-                U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+                }
             }
-        }
 
-        U[3] = 0.;
-
-        U2_rot = U[2];
-        U3_rot = U[3];
-        U[2] = U2_rot * ny + U3_rot * nx;
-        U[3] = U3_rot * ny - U2_rot * nx;
-
-        res_sqr = (U[1] - temp) * (U[1] - temp);
-
-        if (res_sqr > max_res)
-        {
-            max_res = res_sqr;
-            max_res_point = k;
-        }
-
-        sum_res_sqr = sum_res_sqr + res_sqr;
-
-        point.prim[1][k] = U[1];
-        temp = 1.0 / U[1];
-        point.prim[2][k] = U[2] * temp;
-        point.prim[3][k] = U[3] * temp;
-        point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
-    }
-
-    for (i = 1; i <= outer_points; i++)
-
-    {
-        k = outer_points_index[i];
-
-        nx = point.nx[k];
-        ny = point.ny[k];
-
-        conserved_vector_Ubar(point.prim[k], U, nx, ny);
-        conserved_vector_Ubar(point.prim_old[k], U_old, nx, ny);
-
-        temp = U[1];
-
-        if (rk != 3)
-        {
-            for (int j = 1; j <= 4; j++)
-            {
-                U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
-            }
-        }
-        else
-        {
-            for (int j = 1; j <= 4; j++)
-            {
-                U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
-            }
-        }
-
-        U2_rot = U[2];
-
-        U3_rot = U[3];
-
-        U[2] = U2_rot * ny + U3_rot * nx;
-
-        U[3] = U3_rot * ny - U2_rot * nx;
-
-        point.prim[1][k] = U[1];
-        temp = 1.0 / U[1];
-        point.prim[2][k] = U[2] * temp;
-        point.prim[3][k] = U[3] * temp;
-        point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
-    }
-
-    for (i = 1; i <= interior_points; i++)
-    {
-        k = interior_points_index[i];
-
-        nx = point.nx[k];
-        ny = point.ny[k];
-
-        primitive_to_conserved(point.prim[k], nx, ny, U);
-        primitive_to_conserved(point.prim_old[k], nx, ny, U_old);
-
-        temp = U[1];
-
-        if (rk != 3)
-        {
-            for (int j = 1; j <= 4; j++)
-            {
-                U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
-            }
-        }
-        else
-        {
-            for (int j = 1; j <= 4; j++)
-            {
-                U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
-            }
+            U[3] = 0.;
 
             U2_rot = U[2];
             U3_rot = U[3];
@@ -232,12 +153,244 @@ void state_update(int rk)
 
             point.prim[1][k] = U[1];
             temp = 1.0 / U[1];
-            point.prim[1][k] = U[2] * temp;
-            point.prim[1][k] = U[3] * temp;
+            point.prim[2][k] = U[2] * temp;
+            point.prim[3][k] = U[3] * temp;
+            point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+        }
+        else if (point.flag_1[i] == 1)
+        {
+            k = i;
 
-            point.prim[1][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+            nx = point.nx[k];
+            ny = point.ny[k];
+
+            primitive_to_conserved(return_column(point.prim, k), nx, ny, U);
+            primitive_to_conserved(return_column(point.prim, k), nx, ny, U_old);
+
+            temp = U[1];
+
+            if (rk != 3)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+                }
+            }
+            else
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+                }
+
+                U2_rot = U[2];
+                U3_rot = U[3];
+                U[2] = U2_rot * ny + U3_rot * nx;
+                U[3] = U3_rot * ny - U2_rot * nx;
+
+                res_sqr = (U[1] - temp) * (U[1] - temp);
+
+                if (res_sqr > max_res)
+                {
+                    max_res = res_sqr;
+                    max_res_point = k;
+                }
+
+                sum_res_sqr = sum_res_sqr + res_sqr;
+
+                point.prim[1][k] = U[1];
+                temp = 1.0 / U[1];
+                point.prim[1][k] = U[2] * temp;
+                point.prim[1][k] = U[3] * temp;
+
+                point.prim[1][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+            }
+        }
+        else
+        {
+            k = i;
+
+            nx = point.nx[k];
+            ny = point.ny[k];
+
+            conserved_vector_Ubar(return_column(point.prim, k), U, nx, ny);
+            conserved_vector_Ubar(return_column(point.prim, k), U_old, nx, ny);
+
+            temp = U[1];
+
+            if (rk != 3)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+                }
+            }
+            else
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+                }
+            }
+
+            U2_rot = U[2];
+
+            U3_rot = U[3];
+
+            U[2] = U2_rot * ny + U3_rot * nx;
+
+            U[3] = U3_rot * ny - U2_rot * nx;
+
+            point.prim[1][k] = U[1];
+            temp = 1.0 / U[1];
+            point.prim[2][k] = U[2] * temp;
+            point.prim[3][k] = U[3] * temp;
+            point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
         }
     }
+    // for (i = 1; i <= wall_points; i++)
+    // {
+    //     k = wall_points_index[i];
+
+    //     nx = point.nx[k];
+    //     ny = point.ny[k];
+    //     primitive_to_conserved(point.prim[k], nx, ny, U);
+    //     primitive_to_conserved(point.prim_old[k], nx, ny, U_old);
+
+    //     temp = U[1];
+
+    //     if (rk != 3)
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+    //         }
+    //     }
+    //     else
+
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+    //         }
+    //     }
+
+    //     U[3] = 0.;
+
+    //     U2_rot = U[2];
+    //     U3_rot = U[3];
+    //     U[2] = U2_rot * ny + U3_rot * nx;
+    //     U[3] = U3_rot * ny - U2_rot * nx;
+
+    //     res_sqr = (U[1] - temp) * (U[1] - temp);
+
+    //     if (res_sqr > max_res)
+    //     {
+    //         max_res = res_sqr;
+    //         max_res_point = k;
+    //     }
+
+    //     sum_res_sqr = sum_res_sqr + res_sqr;
+
+    //     point.prim[1][k] = U[1];
+    //     temp = 1.0 / U[1];
+    //     point.prim[2][k] = U[2] * temp;
+    //     point.prim[3][k] = U[3] * temp;
+    //     point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+    // }
+
+    // for (i = 1; i <= outer_points; i++)
+
+    // {
+    //     k = outer_points_index[i];
+
+    //     nx = point.nx[k];
+    //     ny = point.ny[k];
+
+    //     conserved_vector_Ubar(point.prim[k], U, nx, ny);
+    //     conserved_vector_Ubar(point.prim_old[k], U_old, nx, ny);
+
+    //     temp = U[1];
+
+    //     if (rk != 3)
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+    //         }
+    //     }
+
+    //     U2_rot = U[2];
+
+    //     U3_rot = U[3];
+
+    //     U[2] = U2_rot * ny + U3_rot * nx;
+
+    //     U[3] = U3_rot * ny - U2_rot * nx;
+
+    //     point.prim[1][k] = U[1];
+    //     temp = 1.0 / U[1];
+    //     point.prim[2][k] = U[2] * temp;
+    //     point.prim[3][k] = U[3] * temp;
+    //     point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+    // }
+
+    // for (i = 1; i <= interior_points; i++)
+    // {
+    //     k = interior_points_index[i];
+
+    //     nx = point.nx[k];
+    //     ny = point.ny[k];
+
+    //     primitive_to_conserved(point.prim[k], nx, ny, U);
+    //     primitive_to_conserved(point.prim_old[k], nx, ny, U_old);
+
+    //     temp = U[1];
+
+    //     if (rk != 3)
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = U[j] - (0.5 * euler * point.flux_res[j][k]);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         for (int j = 1; j <= 4; j++)
+    //         {
+    //             U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
+    //         }
+
+    //         U2_rot = U[2];
+    //         U3_rot = U[3];
+    //         U[2] = U2_rot * ny + U3_rot * nx;
+    //         U[3] = U3_rot * ny - U2_rot * nx;
+
+    //         res_sqr = (U[1] - temp) * (U[1] - temp);
+
+    //         if (res_sqr > max_res)
+    //         {
+    //             max_res = res_sqr;
+    //             max_res_point = k;
+    //         }
+
+    //         sum_res_sqr = sum_res_sqr + res_sqr;
+
+    //         point.prim[1][k] = U[1];
+    //         temp = 1.0 / U[1];
+    //         point.prim[1][k] = U[2] * temp;
+    //         point.prim[1][k] = U[3] * temp;
+
+    //         point.prim[1][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
+    //     }
+    // }
 }
 
 void conserved_to_primitive(std::vector<double> U, std::vector<double> prim)

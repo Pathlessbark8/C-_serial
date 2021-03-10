@@ -22,9 +22,6 @@ void q_lskum()
         // ! end if
 
         //  Reminder to have x and /or y communicated if modified for ghost points
-        // printf("%d\n",local_points);
-        compute_normals();
-        generate_connectivity();
 
         // if(rank == 0) then
         //     write(*,*)
@@ -33,40 +30,39 @@ void q_lskum()
         // end if
 
         //Set U_old to U for first iteration
-        // printf("%d",local_points);
-        // for (i = 1; i <= local_points; i++)
-        // {
-        //         printf("%d\n",i);
-        //         point.U_old[1][i] = point.prim[1][i];
-        //         // point.U_old[2][i] = point.prim[1][i] * point.prim[2][i];
-        //         // point.U_old[3][i] = point.prim[1][i] * point.prim[3][i];
-        //         // point.U_old[4][i] = 2.5 * point.prim[4][i] + 0.5 * point.prim[1][i] * (point.prim[2][i] * point.prim[2][i] + point.prim[3][i] * point.prim[3][i]);
-        // }
+        for (i = 1; i <= local_points; i++)
+        {
+                point.U_old[1][i] = point.prim[1][i];
+                point.U_old[2][i] = point.prim[1][i] * point.prim[2][i];
+                point.U_old[3][i] = point.prim[1][i] * point.prim[3][i];
+                point.U_old[4][i] = 2.5 * point.prim[4][i] + 0.5 * point.prim[1][i] * (point.prim[2][i] * point.prim[2][i] + point.prim[3][i] * point.prim[3][i]);
+        }
 
         // if(rank == 0) then
         //     write(*,*)'.............-Iterations begin-............'
         //     write(*,*)
         // end if
 
-        // t = 0.0;
-        // if (restart == 0)
-        //         itr = 0;
-
-        // for (it = itr + 1; it <= itr + max_iters; it++)
-        // {
-        //         fpi_solver(it);
-        //         t = t + dtg;
-        //         // if (rank==0) then
-        //         //     if(timestep == 0) then
-        //         //         write(*,'(a12,i8,a15,e30.20)')'iterations:',it,'residue:',residue
-        //         //         write(301, *) it, residue
-        //         //     elseif(timestep == 1) then
-        //         //         write(*,'(a12,i8,a15,e30.20)')'iterations:',it,'time:',t
-        //         //         write(301, *) it, t, dtg
-        //         //     end if
-        //         //     if(ieee_is_nan(residue))exit
-        //         // end if
-        // }
+        t = 0.0;
+        if (restart == 0)
+                itr = 0;
+        printf("%d %d\n",itr,max_iters);
+        for (it = itr + 1; it <= itr + max_iters; it++)
+        {
+                fpi_solver(it);
+                printf("%d\n",residue);
+                t = t + dtg;
+                // if (rank==0) then
+                //     if(timestep == 0) then
+                //         write(*,'(a12,i8,a15,e30.20)')'iterations:',it,'residue:',residue
+                //         write(301, *) it, residue
+                //     elseif(timestep == 1) then
+                //         write(*,'(a12,i8,a15,e30.20)')'iterations:',it,'time:',t
+                //         write(301, *) it, t, dtg
+                //     end if
+                //     if(ieee_is_nan(residue))exit
+                // end if
+        }
 
         // CLOSE(UNIT=301)
         // if(rank==0) then

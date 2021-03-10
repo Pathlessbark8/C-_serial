@@ -13,7 +13,6 @@ void print_primal_output()
         fout.open("output.dat", std::ios::out);
 
         fout << max_points << " " << it << " " << res_old;
-        std::cout << max_points << it << res_old;
         for (i = 1; i <= max_points; i++)
         {
                 sos = sqrt(gamma_new * point.prim[4][i] / point.prim[1][i]);

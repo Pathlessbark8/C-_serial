@@ -42,26 +42,27 @@ void fpi_solver(int t)
                 state_update(rk);
         }
 
-        objective_function();
+        // objective_function();
 
-        res_new = sqrt(sum_res_sqr) / max_points;
+        // res_new = sqrt(sum_res_sqr) / max_points;
 
-        if (t < 2 && restart == 0)
-        {
-                res_old = res_new;
-                residue = 0;
-        }
-        else
-        {
-                residue = log10(res_new / res_old);
-        }
+        // if (t < 2 && restart == 0)
+        // {
+        //         res_old = res_new;
+        //         residue = 0;
+        // }
+        // else
+        // {
+        //         residue = log10(res_new / res_old);
+        // }
 
-        //  Print primal output
-        if (it % nsave == 0)
-        {
-                printf("\n");
-                printf(".............-Saving solution-.............\n");
-                printf("\n");
-                print_primal_output();
-        }
+        // //  Print primal output
+        // printf("%d\n",residue);
+        // if (it % nsave == 0)
+        // {
+        //         printf("\n");
+        //         printf(".............-Saving solution-.............\n");
+        //         printf("\n");
+        //         print_primal_output();
+        // }
 }

@@ -224,14 +224,13 @@ void generate_connectivity()
 
     int i, k;
     double nx, ny;
-
     for (k = 1; k <= interior_points; k++)
     {
-        i = interior_points_index[k];
-        nx = point.nx[i];
-        ny = point.ny[i];
-        get_interior_neighbours(i, nx, ny);
-        check_condition_number(i, nx, ny);
+            i = interior_points_index[k];
+            nx = point.nx[i];
+            ny = point.ny[i];
+            get_interior_neighbours(i, nx, ny);
+            check_condition_number(i, nx, ny);
     }
 
     for (k = 1; k <= wall_points; k++)
