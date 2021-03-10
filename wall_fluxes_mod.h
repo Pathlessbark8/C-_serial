@@ -6,11 +6,9 @@
 #include "limiters_mod.h"
 #include <vector>
 
+// This subroutine evaluates the wall flux derivative dGs_pos
 
-	// This subroutine evaluates the wall flux derivative dGs_pos
-
-
-    void wall_dGx_pos(std::vector<double> G, int i)
+void wall_dGx_pos(std::vector<double> G, int i)
 {
 
     int j, k, r;
@@ -100,10 +98,9 @@
     }
 }
 
-	// This subroutine evaluates the wall flux derivative dGs_neg
+// This subroutine evaluates the wall flux derivative dGs_neg
 
-
-    void wall_dGx_neg(std::vector<double> G, int i)
+void wall_dGx_neg(std::vector<double> G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -195,7 +192,7 @@
     }
 }
 
-    void wall_dGy_neg(std::vector<double> G, int i)
+void wall_dGy_neg(std::vector<double> G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;

@@ -7,53 +7,52 @@
 void main(){
         double totaltime,runtime;
 
-        if(ierr /= 0)
-        {
-        printf("Unable to initialize PETSc");
-            exit(0);    
-        } 
+        // if(ierr /= 0)
+        // {
+        // printf("Unable to initialize PETSc");
+        //     exit(0);    
+        // } 
         // stop "Unable to initialize PETSc"
-         MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr)
-         MPI_Comm_size(PETSC_COMM_WORLD, proc, ierr)
-        if(rank==0) then
-                 execute_command_line('mkdir -p solution')
-                 execute_command_line('mkdir -p cp')
-        end if
         
-        totaltime = MPI_Wtime()
-
-        if(rank == 0) then
-                write(*,*)
-                write(*,*)'%%%%%%%%%%%%%-MPI Meshfree Code-%%%%%%%%%%%'
-                write(*,*)
-        end if
-
-!       Read the case file
-
-        if(rank == 0) then
-                write(*,*)'%%%%%%%%%%%-Reading the case file-%%%%%%%%%'
-                write(*,*)
-        end if
+        // if(rank==0) 
+        //          execute_command_line('mkdir -p solution')
+        //          execute_command_line('mkdir -p cp')
+        // end if
         
-         readcase()
+        // totaltime = MPI_Wtime()
 
-!	Reading the input data ..
+        // if(rank == 0) then
+        //         write(*,*)
+        //         write(*,*)'%%%%%%%%%%%%%-MPI Meshfree Code-%%%%%%%%%%%'
+        //         write(*,*)
+        // end if
 
-        if(rank == 0) then
-                write(*,*)
-                write(*,*)'%%%%%%%%%%%%-Reading HDF5 point data-%%%%%%%%%%%'
-                write(*,*)
-        end if
+// !       Read the case file
+
+//         if(rank == 0) then
+//                 write(*,*)'%%%%%%%%%%%-Reading the case file-%%%%%%%%%'
+//                 write(*,*)
+//         end if
         
-         read_hdf5input_point_data()
+         readcase();
 
-        !  read_input_point_data()
+// !	Reading the input data ..
+
+//         if(rank == 0) then
+//                 write(*,*)
+//                 write(*,*)'%%%%%%%%%%%%-Reading HDF5 point data-%%%%%%%%%%%'
+//                 write(*,*)
+//         end if
         
-!       Allocate solution variables
+         read_hdf5input_point_data();
 
-         allocate_soln()
+        // !  read_input_point_data();
+        
+// !       Allocate solution variables
 
-!       Initialize Petsc vectors
+         allocate_soln();
+
+// !       Initialize Petsc vectors
 
         if(proc .ne. 1) init_petsc()
         if(proc == 1) plen = max_points

@@ -83,9 +83,9 @@ void get_interior_neighbours(int i, double nx, double ny)
 }
 void check_condition_number(int i, double nx, double ny)
 {
-// Use lapack_example_aux, Only: nagf_file_print_matrix_real_gen
-// Use lapack_interfaces, Only: dbdsqr, dgebrd, dlacpy, dorgbr
-// Use lapack_precision, Only: dp
+    // Use lapack_example_aux, Only: nagf_file_print_matrix_real_gen
+    // Use lapack_interfaces, Only: dbdsqr, dgebrd, dlacpy, dorgbr
+    // Use lapack_precision, Only: dp
 }
 
 void get_wall_boundary_neighbours(int i, double nx, double ny)
