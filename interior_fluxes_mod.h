@@ -4,10 +4,12 @@
 #include "q_variables_mod.h"
 #include "limiters_mod.h"
 #include <vector>
+#include <iostream>
+using namespace std;
 
 // This subroutine evaluates the interior flux derivative dGx_pos
 
-void interior_dGx_pos(std::vector<double> G, int i)
+void interior_dGx_pos(std::vector<double> &G, int i)
 {
 
     int j, k, r;
@@ -57,24 +59,27 @@ void interior_dGx_pos(std::vector<double> G, int i)
 
         dels_weights = dels * weights;
         deln_weights = deln * weights;
-
+        // if(i==1)
+        // {
+        //     cout<<"dels_weights "<<dels_weights<<endl;
+        //     cout<<"deln_weights "<<deln_weights<<endl;
+        // }
         sum_delx_sqr = sum_delx_sqr + dels * dels_weights;
         sum_dely_sqr = sum_dely_sqr + deln * deln_weights;
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
-
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
@@ -82,24 +87,51 @@ void interior_dGx_pos(std::vector<double> G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_Gxp(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+
+        // if (i == 1 && k == 160){
+        //     for (int tmp = 1; tmp <= 4; ++tmp){
+        //         cout << qtilde_k[tmp] << "\n";
+        //     }
+        // }
+
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
+    // if(i==1)
+    // {
+    //     cout<<"det from Gpos_x "<<det<<endl;
+    // }
     for (int j = 1; j <= 4; j++)
     {
         G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
     }
+    // if(i==1)
+    // {
+    //     // cout<<"sum_Dely_sqr "<<sum_dely_sqr<<endl;
+    //     // cout<<"sum_delx_dely "<<sum_delx_dely<<endl;
+    //     cout<<"sum_delx_delf"<<endl;
+    //     for(int j=1;j<=4;j++)
+    //     {
+    //         cout<<sum_delx_delf[j]<< " ";
+    //     }
+    //     cout<<endl<<"weights: "<<weights<<endl;
+    //     // for(int j=1;j<=4;j++)
+    //     // {
+    //     //     cout<<G[i]<< " ";
+    //     // }
+    //     // cout<<endl;
+    // }
 }
 
 // This subroutine evaluates the interior flux derivative dGx_neg
 
-void interior_dGx_neg(std::vector<double> G, int i)
+void interior_dGx_neg(std::vector<double> &G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -156,18 +188,18 @@ void interior_dGx_neg(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
@@ -175,10 +207,10 @@ void interior_dGx_neg(std::vector<double> G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_Gxn(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[j] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -193,7 +225,7 @@ void interior_dGx_neg(std::vector<double> G, int i)
 
 // This subroutine evaluates the interior flux derivative dGx_neg
 
-void interior_dGy_pos(std::vector<double> G, int i)
+void interior_dGy_pos(std::vector<double> &G, int i)
 
 {
 
@@ -252,29 +284,29 @@ void interior_dGy_pos(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
-        flux_Gxn(G_i, nx, ny, u1, u2, rho, pr);
+        flux_Gyp(G_i, nx, ny, u1, u2, rho, pr);
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
-        flux_Gxn(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        flux_Gyp(G_k, nx, ny, u1, u2, rho, pr);
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -283,13 +315,13 @@ void interior_dGy_pos(std::vector<double> G, int i)
 
     for (int j = 1; j <= 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely)*one_by_det;
     }
 }
 
 // This subroutine evaluates the interior flux derivative dGx_neg
 
-void interior_dGy_neg(std::vector<double> G, int i)
+void interior_dGy_neg(std::vector<double> &G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -346,29 +378,29 @@ void interior_dGy_neg(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
-        flux_Gxn(G_i, nx, ny, u1, u2, rho, pr);
+        flux_Gyn(G_i, nx, ny, u1, u2, rho, pr);
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
-        flux_Gxn(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        flux_Gyn(G_k, nx, ny, u1, u2, rho, pr);
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -377,6 +409,7 @@ void interior_dGy_neg(std::vector<double> G, int i)
 
     for (int j = 1; j <= 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely)*one_by_det
+;
     }
 }

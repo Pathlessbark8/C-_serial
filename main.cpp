@@ -60,6 +60,8 @@ int main()
     local_points = max_points;
     compute_normals();
     generate_connectivity();
+    // cout <<"NBHS\n"<< point.xpos_nbhs[1]<<" "<< point.xneg_nbhs[1]<<" "<< point.ypos_nbhs[1]<<" "<< point.yneg_nbhs[1]<<endl;
+    // cout <<"NBHS\n"<< point.nbhs[1]<<endl;
     initial_conditions();
     q_lskum();
 

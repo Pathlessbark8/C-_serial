@@ -8,7 +8,7 @@
 
 // This subroutine evaluates the wall flux derivative dGs_pos
 
-void wall_dGx_pos(std::vector<double> G, int i)
+void wall_dGx_pos(std::vector<double> &G, int i)
 {
 
     int j, k, r;
@@ -64,18 +64,18 @@ void wall_dGx_pos(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
@@ -83,10 +83,10 @@ void wall_dGx_pos(std::vector<double> G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_quad_GxII(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -100,7 +100,7 @@ void wall_dGx_pos(std::vector<double> G, int i)
 
 // This subroutine evaluates the wall flux derivative dGs_neg
 
-void wall_dGx_neg(std::vector<double> G, int i)
+void wall_dGx_neg(std::vector<double> &G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -157,18 +157,18 @@ void wall_dGx_neg(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
@@ -176,10 +176,10 @@ void wall_dGx_neg(std::vector<double> G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_quad_GxI(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -192,7 +192,7 @@ void wall_dGx_neg(std::vector<double> G, int i)
     }
 }
 
-void wall_dGy_neg(std::vector<double> G, int i)
+void wall_dGy_neg(std::vector<double> &G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -249,18 +249,18 @@ void wall_dGy_neg(std::vector<double> G, int i)
 
         sum_delx_dely = sum_delx_dely + dels * deln_weights;
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
         venkat_limiter(qtilde_i, phi_i, i);
         venkat_limiter(qtilde_k, phi_k, k);
 
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            qtilde_i[j] = point.q[j][i] - 0.5 * phi_i[j] * (delx * point.dq[1][j][i] + dely * point.dq[2][j][i]);
-            qtilde_k[j] = point.q[j][k] - 0.5 * phi_k[j] * (delx * point.dq[1][j][k] + dely * point.dq[2][j][k]);
+            qtilde_i[r] = point.q[r][i] - 0.5 * phi_i[r] * (delx * point.dq[1][r][i] + dely * point.dq[2][r][i]);
+            qtilde_k[r] = point.q[r][k] - 0.5 * phi_k[r] * (delx * point.dq[1][r][k] + dely * point.dq[2][r][k]);
         }
 
         qtilde_to_primitive(qtilde_i, u1, u2, rho, pr);
@@ -268,10 +268,10 @@ void wall_dGy_neg(std::vector<double> G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_Gyn(G_k, nx, ny, u1, u2, rho, pr);
-        for (int j = 1; j <= 4; j++)
+        for (int r = 1; r <= 4; r++)
         {
-            sum_delx_delf[j] = sum_delx_delf[j] + (G_k[j] - G_i[j]) * dels_weights;
-            sum_dely_delf[j] = sum_dely_delf[j] + (G_k[j] - G_i[j]) * deln_weights;
+            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -280,6 +280,6 @@ void wall_dGy_neg(std::vector<double> G, int i)
 
     for (int j = 1; j <= 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely) * one_by_det;
     }
 }

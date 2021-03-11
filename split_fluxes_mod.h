@@ -3,7 +3,7 @@
 #include "parameter_mod.h"
 #include <vector>
 
-void flux_Gxp(std::vector<double> Gxp, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_Gxp(std::vector<double> &Gxp, double nx, double ny, double u1, double u2, double rho, double pr)
 {
     double tx, ty, ut, un;
     double beta, S1, B1, A1pos;
@@ -42,7 +42,7 @@ void flux_Gxp(std::vector<double> Gxp, double nx, double ny, double u1, double u
     Gxp[4] = rho * (temp2 + 0.5 * temp1 * B1);
 }
 
-void flux_Gxn(std::vector<double> Gxn, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_Gxn(std::vector<double> &Gxn, double nx, double ny, double u1, double u2, double rho, double pr)
 
 {
 
@@ -83,7 +83,7 @@ void flux_Gxn(std::vector<double> Gxn, double nx, double ny, double u1, double u
     Gxn[4] = rho * (temp2 - 0.5 * temp1 * B1);
 }
 
-void flux_Gyp(std::vector<double> Gyp, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_Gyp(std::vector<double> &Gyp, double nx, double ny, double u1, double u2, double rho, double pr)
 
 {
 
@@ -124,7 +124,7 @@ void flux_Gyp(std::vector<double> Gyp, double nx, double ny, double u1, double u
     Gyp[4] = rho * (temp2 + 0.5 * temp1 * B2);
 }
 
-void flux_Gyn(std::vector<double> Gyn, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_Gyn(std::vector<double> &Gyn, double nx, double ny, double u1, double u2, double rho, double pr)
 {
     double tx, ty, ut, un;
     double beta, S2, B2, A2neg;

@@ -1,7 +1,10 @@
 #pragma once
 #include "data_structure_mod.h"
 #include <math.h>
-#include<iostream>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 void eval_q_variables()
 {
@@ -39,17 +42,17 @@ void eval_q_derivatives()
 
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    std::vector<double> sum_delx_delq(5, 0), sum_dely_delq(5, 0);
+
     double det, delq, temp;
     double one_by_det;
-
-    for (int i = 1; i <= local_points; i++)
+    fstream ff;
+    ff.open("nbhs", ios::out);
+    ff << setprecision(14) << std::scientific;
+    cout << setprecision(14) << std::scientific;
+    for (int i = 1; i <= max_points; i++)
     {
-        
-
         x_i = point.x[i];
         y_i = point.y[i];
-
         sum_delx_sqr = 0.;
         sum_dely_sqr = 0.;
         sum_delx_dely = 0.;
@@ -59,11 +62,10 @@ void eval_q_derivatives()
             point.qm[1][k][i] = point.q[k][i];
             point.qm[2][k][i] = point.q[k][i];
         }
-
+        std::vector<double> sum_delx_delq(5, 0.0), sum_dely_delq(5, 0.0);
         for (int k = 1; k <= point.nbhs[i]; k++)
         {
             nbh = point.conn[i][k];
-
             for (int r = 1; r <= 4; r++)
             {
                 if (point.q[r][nbh] > point.qm[1][r][i])
@@ -75,7 +77,6 @@ void eval_q_derivatives()
                     point.qm[2][r][i] = point.q[r][nbh];
                 }
             }
-
             x_k = point.x[nbh];
             y_k = point.y[nbh];
 
@@ -89,14 +90,25 @@ void eval_q_derivatives()
             sum_dely_sqr = sum_dely_sqr + dely * dely * weights;
 
             sum_delx_dely = sum_delx_dely + delx * dely * weights;
-            for (int k = 1; k <= 4; k++)
+
+            for (int r = 1; r <= 4; r++)
             {
-                sum_delx_delq[k] = sum_delx_delq[k] + weights * delx * (point.q[k][nbh] - point.q[k][i]);
-                sum_dely_delq[k] = sum_dely_delq[k] + weights * dely * (point.q[k][nbh] - point.q[k][i]);
+                sum_delx_delq[r] = sum_delx_delq[r] + weights * delx * (point.q[r][nbh] - point.q[r][i]);
+                sum_dely_delq[r] = sum_dely_delq[r] + weights * dely * (point.q[r][nbh] - point.q[r][i]);
             }
+            // if (i == 2)
+            // {
+            //     for (int r = 1; r <= 4; r++)
+            //     {
+            //         cout << sum_delx_delq[r] << " ";
+            //     }
+            //     cout << endl;
+            // }
         }
+
         det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
         one_by_det = 1.0 / det;
+
         for (int k = 1; k <= 4; k++)
         {
             point.dq[1][k][i] = (sum_delx_delq[k] * sum_dely_sqr - sum_dely_delq[k] * sum_delx_dely) * one_by_det;
@@ -215,7 +227,7 @@ void eval_update_innerloop()
     }
 }
 
-void qtilde_to_primitive(std::vector<double> &qtilde, double u1, double u2, double rho, double pr)
+void qtilde_to_primitive(std::vector<double> &qtilde, double &u1, double &u2, double &rho, double &pr)
 
 {
     double beta, temp, temp1, temp2;

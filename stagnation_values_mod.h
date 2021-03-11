@@ -52,7 +52,7 @@ void objective_function_J()
     int i;
     double p0_inf, gammaPower, p0, p0_sum, constant, angle, mach_t;
     std::vector<double> prim(5);
-    ;
+
     double total_p0;
 
     gammaPower = gamma_new / (gamma_new - 1);

@@ -15,7 +15,7 @@ std::vector<double> return_column(std::vector<std::vector<double>> a, int k)
     return temp;
 }
 
-void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std::vector<double> U)
+void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std::vector<double> &U)
 {
 
     double rho;
@@ -32,7 +32,7 @@ void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std:
     U[3] = temp1 * nx + temp2 * ny;
 }
 
-void conserved_vector_Ubar(std::vector<double> prim, std::vector<double> Ubar, double nx, double ny)
+void conserved_vector_Ubar(std::vector<double> prim, std::vector<double> &Ubar, double nx, double ny)
 
 {
 

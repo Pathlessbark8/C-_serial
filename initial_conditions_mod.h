@@ -1,6 +1,24 @@
 #pragma once
 #include "data_structure_mod.h"
 #include "parameter_mod.h"
+#include <fstream>
+#include <iostream>
+
+void restart_sol()
+{
+    std::ifstream fin;
+    double nop;
+    fin.open("restart.dat");
+    fin >> nop >> itr >> res_old;
+    int i = 1;
+    for(int i=1;i<=max_points;i++)
+    {
+            fin >> nop >> nop >> nop >> nop >> nop >> point.prim[1][i] >> point.prim[2][i] >> point.prim[3][i] >> point.prim[4][i];
+            // std::cout<<"Here is the file read\n";
+            // std::cout << point.prim[1][i] <<" "<< point.prim[2][i] <<" "<< point.prim[3][i] <<" "<< point.prim[4][i]<<std::endl;
+    }
+    fin.close();
+}
 
 void initial_conditions()
 
@@ -26,7 +44,7 @@ void initial_conditions()
         // end if
         setup_case_parameters();
 
-        //restart_sol();
+        restart_sol();
 
         //  update_begin_prim_ghost();
         //  update_end_prim_ghost();

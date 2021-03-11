@@ -22,7 +22,7 @@ void get_interior_neighbours(int i, double nx, double ny)
     point.ypos_nbhs[i] = 0;
     point.yneg_nbhs[i] = 0;
 
-    for (r = 1; i <= point.nbhs[i]; i++)
+    for (r = 1; r <= point.nbhs[i]; r++)
     {
         nbh = point.conn[i][r];
         xk = point.x[nbh];
@@ -43,7 +43,7 @@ void get_interior_neighbours(int i, double nx, double ny)
             point.xpos_conn[i][count] = nbh;
         }
 
-        if (dels > 0.0)
+        if (dels >= 0.0)
 
         {
             point.xneg_nbhs[i] = point.xneg_nbhs[i] + 1;
@@ -224,28 +224,26 @@ void generate_connectivity()
 
     int i, k;
     double nx, ny;
-    for (k = 1; k <= interior_points; k++)
+    for (int i = 1; i <= max_points; i++)
     {
-            i = interior_points_index[k];
+        if (point.flag_1[i] == 0)
+        {
+            nx = point.nx[i];
+            ny = point.ny[i];
+            get_wall_boundary_neighbours(i, nx, ny);
+        }
+        else if (point.flag_1[i] == 1)
+        {
             nx = point.nx[i];
             ny = point.ny[i];
             get_interior_neighbours(i, nx, ny);
             check_condition_number(i, nx, ny);
-    }
-
-    for (k = 1; k <= wall_points; k++)
-    {
-        i = wall_points_index[k];
-        nx = point.nx[i];
-        ny = point.ny[i];
-        get_wall_boundary_neighbours(i, nx, ny);
-    }
-
-    for (k = 1; k <= outer_points; k++)
-    {
-        i = outer_points_index[k];
-        nx = point.nx[i];
-        ny = point.ny[i];
-        get_outer_boundary_neighbours(i, nx, ny);
+        }
+        else
+        {
+            nx = point.nx[i];
+            ny = point.ny[i];
+            get_outer_boundary_neighbours(i, nx, ny);
+        }
     }
 }

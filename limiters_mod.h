@@ -52,7 +52,7 @@ void min_q_value(int i, std::vector<double> &mini)
 
 // The following subroutines are used for venkatakrishnan limiter ..
 
-void venkat_limiter(std::vector<double> qtilde, std::vector<double> phi, int k)
+void venkat_limiter(std::vector<double> &qtilde, std::vector<double> &phi, int k)
 {
 
     int r;

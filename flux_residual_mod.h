@@ -13,59 +13,77 @@ void cal_flux_residual()
     int i, k;
     std::vector<double> Gxp(5), Gxn(5), Gyp(5), Gyn(5);
 
-    for (int i = 1; i <= wall_points; i++)
+    for (int i = 1; i <= max_points; ++i)
     {
-
-        k = wall_points_index[i];
-
-        wall_dGx_pos(Gxp, k);
-
-        wall_dGx_neg(Gxn, k);
-
-        wall_dGy_neg(Gyn, k);
-
-        for (int j = 1; j <= 4; j++)
+        if (point.flag_1[i] == 0)
         {
-            point.flux_res[j][k] = Gxp[j] + Gxn[j] + Gyn[j];
+
+            wall_dGx_pos(Gxp, i);
+
+            wall_dGx_neg(Gxn, i);
+
+            wall_dGy_neg(Gyn, i);
+
+            for (int j = 1; j <= 4; j++)
+            {
+                point.flux_res[j][i] = (2.0 * point.delta[i]) * (Gxp[j] + Gxn[j] + Gyn[j]);
+            }
         }
-
-        for (int j = 1; j <= 4; j++)
+        else if (point.flag_1[i] == 1)
         {
-            point.flux_res[j][k] = 2.0 * point.delta[k] * point.flux_res[j][k];
+
+            interior_dGx_pos(Gxp, i);
+
+            interior_dGx_neg(Gxn, i);
+
+            interior_dGy_pos(Gyp, i);
+
+            interior_dGy_neg(Gyn, i);
+
+            for (int j = 1; j <= 4; j++)
+            {
+                point.flux_res[j][i] = point.delta[i] * (Gxp[j] + Gxn[j] + Gyp[j] + Gyn[j]);
+            }
+            if (i == 1)
+            {
+                cout << "GXP\n";
+                for (int r = 1; r <= 4; r++)
+                {
+                    cout << Gxp[r] << " ";
+                }
+                cout << endl;
+                cout << "GXN\n";
+                for (int r = 1; r <= 4; r++)
+                {
+                    cout << Gxn[r] << " ";
+                }
+                cout << endl;
+                cout << "GYP\n";
+                for (int r = 1; r <= 4; r++)
+                {
+                    cout << Gyp[r] << " ";
+                }
+                cout << endl;
+                cout << "GYN\n";
+                for (int r = 1; r <= 4; r++)
+                {
+                    cout << Gyn[r] << " ";
+                }
+                cout << endl;
+            }
         }
-    }
-
-    for (i = 1; i <= outer_points; i++)
-    {
-
-        k = outer_points_index[i];
-
-        outer_dGx_pos(Gxp, k);
-
-        outer_dGx_neg(Gxn, k);
-
-        outer_dGy_pos(Gyp, k);
-        for (int j = 1; j <= 4; j++)
+        else
         {
-            point.flux_res[j][k] = point.delta[k] * (Gxp[j] + Gxn[j] + Gyp[j]);
-        }
-    }
 
-    for (i = 1; i <= interior_points; i++)
-    {
-        k = interior_points_index[i];
+            outer_dGx_pos(Gxp, i);
 
-        interior_dGx_pos(Gxp, k);
+            outer_dGx_neg(Gxn, i);
 
-        interior_dGx_neg(Gxn, k);
-
-        interior_dGy_pos(Gyp, k);
-
-        interior_dGy_neg(Gyn, k);
-
-        for (int j = 1; j <= 4; j++)
-        {
-            point.flux_res[j][k] = point.delta[k] * (Gxp[j] + Gxn[j] + Gyp[j] + Gyn[j]);
+            outer_dGy_pos(Gyp, i);
+            for (int j = 1; j <= 4; j++)
+            {
+                point.flux_res[j][i] = point.delta[i] * (Gxp[j] + Gxn[j] + Gyp[j]);
+            }
         }
     }
 }

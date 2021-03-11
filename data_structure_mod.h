@@ -54,7 +54,7 @@ std::vector<int> interior_points_index;
 std::vector<int> shape_points_index;
 
 // iterations
-int it, itr=3;
+int it=0, itr=3;
 
 // Flag for time stepping
 int rks=1;
@@ -69,7 +69,7 @@ int plen;
 int format;
 
 // The parameter CFL is the CFL number for stability ..
-double CFL;
+double CFL=0.1;
 
 int max_iters=1;
 
@@ -95,7 +95,7 @@ double power=0;
 int limiter_flag;
 double VL_CONST=150; // Venkatakrishnan limiter constant ..
 
-int restart=0;
+int restart=1;
 
 //    Interior points normal flag ..
 //    If flag is zero => nx = 0.0 and ny = 1.0
@@ -143,11 +143,11 @@ void allocate_soln()
     point.ypos_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
     point.yneg_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
     point.delta = std::vector<double>(max_points + 1);
-    // Cl = std::vector<double>(shapes+1);
-    // Cd = std::vector<double>(shapes+1);
-    // Cm = std::vector<double>(shapes+1);
-    // cfv = std::vector<double>(shapes+1);
-    // ClCd = std::vector<double>(shapes+1);
-    // vector_cost_func = std::vector<double>(shapes+1);
+    Cl = std::vector<double>(shapes+1);
+    Cd = std::vector<double>(shapes+1);
+    Cm = std::vector<double>(shapes+1);
+    cfv = std::vector<double>(shapes+1);
+    ClCd = std::vector<double>(shapes+1);
+    vector_cost_func = std::vector<double>(shapes+1);
 }
 
