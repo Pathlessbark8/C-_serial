@@ -105,6 +105,9 @@ void state_update(int rk)
 
     max_res = 0.0;
     sum_res_sqr = 0.0;
+
+    // cout<<"obt "<<obt<<endl;
+    // cout<<"tbt "<<tbt<<endl;
     for (i = 1; i <= max_points; i++)
     {
         if (point.flag_1[i] == 0)
@@ -113,8 +116,18 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-            primitive_to_conserved(return_column(point.prim, k), nx, ny, U);
-            primitive_to_conserved(return_column(point.prim, k), nx, ny, U_old);
+            std::vector<double> temp1(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp1[r] = point.prim[r][k];
+            }
+            std::vector<double> temp2(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp2[r] = point.prim_old[r][k];
+            }
+            primitive_to_conserved(temp1, nx, ny, U);
+            primitive_to_conserved(temp2, nx, ny, U_old);
 
             temp = U[1];
 
@@ -163,9 +176,18 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-
-            primitive_to_conserved(return_column(point.prim, k), nx, ny, U);
-            primitive_to_conserved(return_column(point.prim, k), nx, ny, U_old);
+            std::vector<double> temp1(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp1[r] = point.prim[r][k];
+            }
+            std::vector<double> temp2(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp2[r] = point.prim_old[r][k];
+            }
+            primitive_to_conserved(temp1, nx, ny, U);
+            primitive_to_conserved(temp2, nx, ny, U_old);
 
             temp = U[1];
 
@@ -177,34 +199,35 @@ void state_update(int rk)
                 }
             }
             else
+
             {
                 for (int j = 1; j <= 4; j++)
                 {
                     U[j] = tbt * U_old[j] + obt * (U[j] - 0.5 * point.flux_res[j][k]);
                 }
-
-                U2_rot = U[2];
-                U3_rot = U[3];
-                U[2] = U2_rot * ny + U3_rot * nx;
-                U[3] = U3_rot * ny - U2_rot * nx;
-
-                res_sqr = (U[1] - temp) * (U[1] - temp);
-
-                if (res_sqr > max_res)
-                {
-                    max_res = res_sqr;
-                    max_res_point = k;
-                }
-
-                sum_res_sqr = sum_res_sqr + res_sqr;
-
-                point.prim[1][k] = U[1];
-                temp = 1.0 / U[1];
-                point.prim[1][k] = U[2] * temp;
-                point.prim[1][k] = U[3] * temp;
-
-                point.prim[1][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
             }
+            
+            U2_rot = U[2];
+            U3_rot = U[3];
+            U[2] = U2_rot * ny + U3_rot * nx;
+            U[3] = U3_rot * ny - U2_rot * nx;
+
+            res_sqr = (U[1] - temp) * (U[1] - temp);
+
+            if (res_sqr > max_res)
+            {
+                max_res = res_sqr;
+                max_res_point = k;
+            }
+
+            sum_res_sqr = sum_res_sqr + res_sqr;
+
+            point.prim[1][k] = U[1];
+            temp = 1.0 / U[1];
+            point.prim[2][k] = U[2] * temp;
+            point.prim[3][k] = U[3] * temp;
+
+            point.prim[4][k] = 0.4 * U[4] - (0.2 * temp) * (U[2] * U[2] + U[3] * U[3]);
         }
         else
         {
@@ -212,9 +235,18 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-
-            conserved_vector_Ubar(return_column(point.prim, k), U, nx, ny);
-            conserved_vector_Ubar(return_column(point.prim, k), U_old, nx, ny);
+            std::vector<double> temp1(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp1[r] = point.prim[r][k];
+            }
+            std::vector<double> temp2(5);
+            for (int r = 1; r <= 4; r++)
+            {
+                temp2[r] = point.prim_old[r][k];
+            }
+            conserved_vector_Ubar(temp1, U, nx, ny);
+            conserved_vector_Ubar(temp2, U_old, nx, ny);
 
             temp = U[1];
 
@@ -226,6 +258,7 @@ void state_update(int rk)
                 }
             }
             else
+
             {
                 for (int j = 1; j <= 4; j++)
                 {

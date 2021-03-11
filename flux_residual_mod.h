@@ -44,33 +44,33 @@ void cal_flux_residual()
             {
                 point.flux_res[j][i] = point.delta[i] * (Gxp[j] + Gxn[j] + Gyp[j] + Gyn[j]);
             }
-            if (i == 1)
-            {
-                cout << "GXP\n";
-                for (int r = 1; r <= 4; r++)
-                {
-                    cout << Gxp[r] << " ";
-                }
-                cout << endl;
-                cout << "GXN\n";
-                for (int r = 1; r <= 4; r++)
-                {
-                    cout << Gxn[r] << " ";
-                }
-                cout << endl;
-                cout << "GYP\n";
-                for (int r = 1; r <= 4; r++)
-                {
-                    cout << Gyp[r] << " ";
-                }
-                cout << endl;
-                cout << "GYN\n";
-                for (int r = 1; r <= 4; r++)
-                {
-                    cout << Gyn[r] << " ";
-                }
-                cout << endl;
-            }
+            // if (i == 1)
+            // {
+            //     cout << "GXP\n";
+            //     for (int r = 1; r <= 4; r++)
+            //     {
+            //         cout << Gxp[r] << " ";
+            //     }
+            //     cout << endl;
+            //     cout << "GXN\n";
+            //     for (int r = 1; r <= 4; r++)
+            //     {
+            //         cout << Gxn[r] << " ";
+            //     }
+            //     cout << endl;
+            //     cout << "GYP\n";
+            //     for (int r = 1; r <= 4; r++)
+            //     {
+            //         cout << Gyp[r] << " ";
+            //     }
+            //     cout << endl;
+            //     cout << "GYN\n";
+            //     for (int r = 1; r <= 4; r++)
+            //     {
+            //         cout << Gyn[r] << " ";
+            //     }
+            //     cout << endl;
+            // }
         }
         else
         {

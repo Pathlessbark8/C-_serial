@@ -57,8 +57,8 @@ std::vector<int> shape_points_index;
 int it=0, itr=3;
 
 // Flag for time stepping
-int rks=1;
-double euler=2.0;
+int rks=4;
+double euler=1.0;
 double total_loss_stagpressure;
 double res_old=0, res_new=0, residue, max_res=0;
 double gsum_res_sqr=0, sum_res_sqr=0;
@@ -71,7 +71,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL=0.1;
 
-int max_iters=1;
+int max_iters=3;
 
 // Unsteady variables
 double t, tfinal, dtg;
@@ -95,7 +95,7 @@ double power=0;
 int limiter_flag;
 double VL_CONST=150; // Venkatakrishnan limiter constant ..
 
-int restart=1;
+int restart=0;
 
 //    Interior points normal flag ..
 //    If flag is zero => nx = 0.0 and ny = 1.0
@@ -115,7 +115,7 @@ double fo_flag;
 double Cl_flag, Cd_flag, Cm_flag, Cl_Cd_flag, ent_flag, ens_flag;
 int obj_flag;
 
-int inner_iterations = 0;
+int inner_iterations = 3;
 
 //    No of shapes
 int shapes = 1;

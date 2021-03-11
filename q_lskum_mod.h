@@ -27,13 +27,12 @@ void q_lskum()
 
         t = 0.0;
         if (restart == 0)
+        {
                 itr = 0;
-        // printf("%d %d\n",itr,max_iters);
+        }
         for (it = itr + 1; it <= itr + max_iters; it++)
         {
-                // printf("it:%d\n",it);
                 fpi_solver(it);
-                // printf("%lf\n",residue);
                 t = t + dtg;
         }
 }

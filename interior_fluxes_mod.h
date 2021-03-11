@@ -207,10 +207,19 @@ void interior_dGx_neg(std::vector<double> &G, int i)
 
         qtilde_to_primitive(qtilde_k, u1, u2, rho, pr);
         flux_Gxn(G_k, nx, ny, u1, u2, rho, pr);
+        // if (i == 1)
+        // {
+        //     cout<<"G_i\n";
+        //     for (int r = 1; r <= 4; r++)
+        //     {
+        //         cout<<G_i[r]<<" ";
+        //     }
+        //     cout<<endl;
+        // }
         for (int r = 1; r <= 4; r++)
         {
             sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
-            sum_dely_delf[r] = sum_dely_delf[j] + (G_k[r] - G_i[r]) * deln_weights;
+            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -315,7 +324,7 @@ void interior_dGy_pos(std::vector<double> &G, int i)
 
     for (int j = 1; j <= 4; j++)
     {
-        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely)*one_by_det;
+        G[j] = (sum_dely_delf[j] * sum_delx_sqr - sum_delx_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
 
@@ -409,7 +418,6 @@ void interior_dGy_neg(std::vector<double> &G, int i)
 
     for (int j = 1; j <= 4; j++)
     {
-        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely)*one_by_det
-;
+        G[j] = (sum_dely_delf[j] * sum_delx_sqr - sum_delx_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
