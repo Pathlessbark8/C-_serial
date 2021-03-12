@@ -8,7 +8,7 @@ const double rho_inf = 1.0;
 const double pr_inf = 1.0/1.4;
 const double gamma_new = 1.4;
 const double pi=4*atan(1.0);
-std::vector<double> q_init(5), q_inf(5);
+std::vector<double> q_init(4), q_inf(4);
 
   void setup_case_parameters()
   {
@@ -17,14 +17,14 @@ std::vector<double> q_init(5), q_inf(5);
         theta = aoa*pi/180;
         
         // Setup initial conditions
-        q_init[1] = rho_inf;
-        q_init[2] = mach*cos(theta);
-        q_init[3] = mach*sin(theta);
-        q_init[4] = pr_inf;
+        q_init[0] = rho_inf;
+        q_init[1] = mach*cos(theta);
+        q_init[2] = mach*sin(theta);
+        q_init[3] = pr_inf;
         
         // Setup free stream conditions
-        q_inf[1] = rho_inf;
-        q_inf[2] = mach*cos(theta);
-        q_inf[3] = mach*sin(theta);
-        q_inf[4] = pr_inf;
+        q_inf[0] = rho_inf;
+        q_inf[1] = mach*cos(theta);
+        q_inf[2] = mach*sin(theta);
+        q_inf[3] = pr_inf;
   }

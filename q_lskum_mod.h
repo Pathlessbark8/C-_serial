@@ -19,10 +19,10 @@ void q_lskum()
         //Set U_old to U for first iteration
         for (i = 1; i <= local_points; i++)
         {
-                point.U_old[1][i] = point.prim[1][i];
-                point.U_old[2][i] = point.prim[1][i] * point.prim[2][i];
-                point.U_old[3][i] = point.prim[1][i] * point.prim[3][i];
-                point.U_old[4][i] = 2.5 * point.prim[4][i] + 0.5 * point.prim[1][i] * (point.prim[2][i] * point.prim[2][i] + point.prim[3][i] * point.prim[3][i]);
+                point.U_old[0][i] = point.prim[0][i];
+                point.U_old[1][i] = point.prim[0][i] * point.prim[1][i];
+                point.U_old[2][i] = point.prim[0][i] * point.prim[2][i];
+                point.U_old[3][i] = 2.5 * point.prim[3][i] + 0.5 * point.prim[0][i] * (point.prim[1][i] * point.prim[1][i] + point.prim[2][i] * point.prim[2][i]);
         }
 
         t = 0.0;

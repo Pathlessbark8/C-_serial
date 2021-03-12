@@ -49,10 +49,10 @@
 
                     sum_delx_dely = sum_delx_dely + delx*dely*weights;
 
-                    sum_delx_delu1 = sum_delx_delu1 + weights*delx*(point.prim[2][nbh] - point.prim[2][i]);
-                    sum_delx_delu2 = sum_delx_delu2 + weights*delx*(point.prim[3][nbh] - point.prim[3][i]);
-                    sum_dely_delu1 = sum_dely_delu1 + weights*dely*(point.prim[2][nbh] - point.prim[2][i]);
-                    sum_dely_delu2 = sum_dely_delu2 + weights*dely*(point.prim[3][nbh] - point.prim[3][i]);
+                    sum_delx_delu1 = sum_delx_delu1 + weights*delx*(point.prim[1][nbh] - point.prim[1][i]);
+                    sum_delx_delu2 = sum_delx_delu2 + weights*delx*(point.prim[2][nbh] - point.prim[2][i]);
+                    sum_dely_delu1 = sum_dely_delu1 + weights*dely*(point.prim[1][nbh] - point.prim[1][i]);
+                    sum_dely_delu2 = sum_dely_delu2 + weights*dely*(point.prim[2][nbh] - point.prim[2][i]);
 
 }
 

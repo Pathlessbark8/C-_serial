@@ -71,7 +71,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL=0.1;
 
-int max_iters=3;
+int max_iters=1000;
 
 // Unsteady variables
 double t, tfinal, dtg;
@@ -122,15 +122,15 @@ int shapes = 1;
 
 void allocate_soln()
 {
-    point.prim = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.prim_old = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.flux_res = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.U_old = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.q = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.U = std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1));
-    point.dq = std::vector<std::vector<std::vector<double>>>(2 + 1, std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1)));
-    point.qm = std::vector<std::vector<std::vector<double>>>(2 + 1, std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1)));
-    point.temp = std::vector<std::vector<std::vector<double>>>(3 + 1, std::vector<std::vector<double>>(4 + 1, std::vector<double>(max_points + 1)));
+    point.prim = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.prim_old = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.flux_res = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.U_old = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.q = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.U = std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1));
+    point.dq = std::vector<std::vector<std::vector<double>>>(2 , std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1)));
+    point.qm = std::vector<std::vector<std::vector<double>>>(2 , std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1)));
+    point.temp = std::vector<std::vector<std::vector<double>>>(3 , std::vector<std::vector<double>>(4 , std::vector<double>(max_points + 1)));
     point.entropy = std::vector<double>(max_points + 1);
     point.vorticity = std::vector<double>(max_points + 1);
     point.vorticity_sqr = std::vector<double>(max_points + 1);
@@ -138,10 +138,10 @@ void allocate_soln()
     point.xneg_nbhs = std::vector<int>(max_points + 1);
     point.ypos_nbhs = std::vector<int>(max_points + 1);
     point.yneg_nbhs = std::vector<int>(max_points + 1);
-    point.xpos_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
-    point.xneg_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
-    point.ypos_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
-    point.yneg_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
+    point.xpos_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
+    point.xneg_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
+    point.ypos_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
+    point.yneg_conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
     point.delta = std::vector<double>(max_points + 1);
     Cl = std::vector<double>(shapes+1);
     Cd = std::vector<double>(shapes+1);

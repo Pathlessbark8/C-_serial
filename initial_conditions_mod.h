@@ -13,9 +13,9 @@ void restart_sol()
     int i = 1;
     for(int i=1;i<=max_points;i++)
     {
-            fin >> nop >> nop >> nop >> nop >> nop >> point.prim[1][i] >> point.prim[2][i] >> point.prim[3][i] >> point.prim[4][i];
+            fin >> nop >> nop >> nop >> nop >> nop >> point.prim[0][i] >> point.prim[1][i] >> point.prim[2][i] >> point.prim[3][i];
             // std::cout<<"Here is the file read\n";
-            // std::cout << point.prim[1][i] <<" "<< point.prim[2][i] <<" "<< point.prim[3][i] <<" "<< point.prim[4][i]<<std::endl;
+            // std::cout << point.prim[0][i] <<" "<< point.prim[1][i] <<" "<< point.prim[2][i] <<" "<< point.prim[3][i]<<std::endl;
     }
     fin.close();
 }
@@ -29,10 +29,10 @@ void initial_conditions()
         setup_case_parameters();
         for (k = 1; k <= max_points; k++)
         {
+            point.prim[0][k] = q_init[0];
             point.prim[1][k] = q_init[1];
             point.prim[2][k] = q_init[2];
             point.prim[3][k] = q_init[3];
-            point.prim[4][k] = q_init[4];
         }
     }
 

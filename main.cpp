@@ -24,7 +24,7 @@ int main()
     point.flag_2 = std::vector<int>(max_points + 1);
     point.nbhs = std::vector<int>(max_points + 1);
     point.min_dist = std::vector<double>(max_points + 1);
-    point.conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 + 1));
+    point.conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
     point.nx = std::vector<double>(max_points + 1);
     point.ny = std::vector<double>(max_points + 1);
     for (int i = 1; i <= max_points; i++)
@@ -60,8 +60,8 @@ int main()
     local_points = max_points;
     compute_normals();
     generate_connectivity();
-    // cout <<"NBHS\n"<< point.xpos_nbhs[1]<<" "<< point.xneg_nbhs[1]<<" "<< point.ypos_nbhs[1]<<" "<< point.yneg_nbhs[1]<<endl;
-    // cout <<"NBHS\n"<< point.nbhs[1]<<endl;
+    // cout <<"NBHS\n"<< point.xpos_nbhs[0]<<" "<< point.xneg_nbhs[0]<<" "<< point.ypos_nbhs[0]<<" "<< point.yneg_nbhs[0]<<endl;
+    // cout <<"NBHS\n"<< point.nbhs[0]<<endl;
     initial_conditions();
     q_lskum();
 
@@ -74,11 +74,11 @@ int main()
     // fout.open("validate.dat",ios::out);
     // while(!fin.eof())
     // {
-    //     fin>>arr[1]>>arr[2]>>arr[3]>>arr[4];
+    //     fin>>arr[0]>>arr[1]>>arr[2]>>arr[3];
     //     fin>>t_nx>> t_ny>> t_u1>>t_u2>> t_rho>>t_pr;
     //     if(!fin.eof())
     //     {
-    //         // cout<<arr[1]<<arr[2]<<arr[3]<<arr[3]<<endl;
+    //         // cout<<arr[0]<<arr[1]<<arr[2]<<arr[2]<<endl;
     //         // cout<<t_nx<< t_ny<< t_u1<<t_u2<< t_rho<<t_pr<<endl;
     //         // for(int i=1;i<5;i++)
     //         // {

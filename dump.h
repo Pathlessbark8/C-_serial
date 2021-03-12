@@ -28,7 +28,7 @@ void dump()
         fout2 << i << "   " ;
         for (int j = 1; j <= 4; j++)
         {
-            fout2  << point.dq[1][j][i] << " ";
+            fout2  << point.dq[0][j][i] << " ";
         }
         fout2 << endl;
         fout3 << i << "   " ;
@@ -40,7 +40,7 @@ void dump()
         fout4 << i << "   " ;
         for (int j = 1; j <= 4; j++)
         {
-            fout4  << point.dq[2][j][i] << " ";
+            fout4  << point.dq[1][j][i] << " ";
         }
         fout4 << endl;
         fout5 << i << "   " ;

@@ -15,8 +15,8 @@ void compute_entropy()
 
         for (k = 1; k <= max_points; k++)
         {
-                temp1 = pow((point.prim[1][k]), gamma_new);
-                temp1 = point.prim[4][k] / temp1;
+                temp1 = pow((point.prim[0][k]), gamma_new);
+                temp1 = point.prim[3][k] / temp1;
                 temp1 = log(temp1);
                 point.entropy[k] = abs(temp1 - temp2);
 

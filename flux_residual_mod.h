@@ -11,7 +11,7 @@ void cal_flux_residual()
 
 {
     int i, k;
-    std::vector<double> Gxp(5), Gxn(5), Gyp(5), Gyn(5);
+    std::vector<double> Gxp(4), Gxn(4), Gyp(4), Gyn(4);
 
     for (int i = 1; i <= max_points; ++i)
     {
@@ -24,7 +24,7 @@ void cal_flux_residual()
 
             wall_dGy_neg(Gyn, i);
 
-            for (int j = 1; j <= 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 point.flux_res[j][i] = (2.0 * point.delta[i]) * (Gxp[j] + Gxn[j] + Gyn[j]);
             }
@@ -40,7 +40,7 @@ void cal_flux_residual()
 
             interior_dGy_neg(Gyn, i);
 
-            for (int j = 1; j <= 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 point.flux_res[j][i] = point.delta[i] * (Gxp[j] + Gxn[j] + Gyp[j] + Gyn[j]);
             }
@@ -80,7 +80,7 @@ void cal_flux_residual()
             outer_dGx_neg(Gxn, i);
 
             outer_dGy_pos(Gyp, i);
-            for (int j = 1; j <= 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 point.flux_res[j][i] = point.delta[i] * (Gxp[j] + Gxn[j] + Gyp[j]);
             }

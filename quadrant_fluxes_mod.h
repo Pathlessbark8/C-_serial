@@ -33,14 +33,14 @@ void flux_quad_GxI(std::vector<double> &G, double nx, double ny, double u1, doub
 
         // Expressions for the split fluxes ..
 
-        G[1] = rho * A2neg * (ut * A1neg - B1);
+        G[0] = rho * A2neg * (ut * A1neg - B1);
         temp1 = pr_by_rho + ut * ut;
         temp2 = temp1 * A1neg - ut * B1;
-        G[2] = rho * A2neg * temp2;
+        G[1] = rho * A2neg * temp2;
 
         temp1 = ut * A1neg - B1;
         temp2 = un * A2neg - B2;
-        G[3] = rho * temp1 * temp2;
+        G[2] = rho * temp1 * temp2;
 
         temp1 = (7.0 * pr_by_rho) + u_sqr;
         temp2 = 0.5 * ut * temp1 * A1neg;
@@ -51,7 +51,7 @@ void flux_quad_GxI(std::vector<double> &G, double nx, double ny, double u1, doub
         temp1 = ut * A1neg - B1;
         temp4 = 0.5 * rho * un * B2 * temp1;
 
-        G[4] = rho * A2neg * (temp2 - temp3) - temp4;
+        G[3] = rho * A2neg * (temp2 - temp3) - temp4;
 }
 
 void flux_quad_GxII(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -83,15 +83,15 @@ void flux_quad_GxII(std::vector<double> &G, double nx, double ny, double u1, dou
 
         // 	Expressions for the split fluxes ..
 
-        G[1] = rho * A2neg * (ut * A1pos + B1);
+        G[0] = rho * A2neg * (ut * A1pos + B1);
 
         temp1 = pr_by_rho + ut * ut;
         temp2 = temp1 * A1pos + ut * B1;
-        G[2] = rho * A2neg * temp2;
+        G[1] = rho * A2neg * temp2;
 
         temp1 = ut * A1pos + B1;
         temp2 = un * A2neg - B2;
-        G[3] = rho * temp1 * temp2;
+        G[2] = rho * temp1 * temp2;
 
         temp1 = (7.0 * pr_by_rho) + u_sqr;
         temp2 = 0.5 * ut * temp1 * A1pos;
@@ -102,7 +102,7 @@ void flux_quad_GxII(std::vector<double> &G, double nx, double ny, double u1, dou
         temp1 = ut * A1pos + B1;
         temp4 = 0.5 * rho * un * B2 * temp1;
 
-        G[4] = rho * A2neg * (temp2 + temp3) - temp4;
+        G[3] = rho * A2neg * (temp2 + temp3) - temp4;
 }
 
 void flux_quad_GxIII(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -136,15 +136,15 @@ void flux_quad_GxIII(std::vector<double> &G, double nx, double ny, double u1, do
 
         // Expressions for the split fluxes ..
 
-        G[1] = rho * A2pos * (ut * A1pos + B1);
+        G[0] = rho * A2pos * (ut * A1pos + B1);
 
         temp1 = pr_by_rho + ut * ut;
         temp2 = temp1 * A1pos + ut * B1;
-        G[2] = rho * A2pos * temp2;
+        G[1] = rho * A2pos * temp2;
 
         temp1 = ut * A1pos + B1;
         temp2 = un * A2pos + B2;
-        G[3] = rho * temp1 * temp2;
+        G[2] = rho * temp1 * temp2;
 
         temp1 = (7.0 * pr_by_rho) + u_sqr;
         temp2 = 0.5 * ut * temp1 * A1pos;
@@ -155,7 +155,7 @@ void flux_quad_GxIII(std::vector<double> &G, double nx, double ny, double u1, do
         temp1 = ut * A1pos + B1;
         temp4 = 0.5 * rho * un * B2 * temp1;
 
-        G[4] = rho * A2pos * (temp2 + temp3) + temp4;
+        G[3] = rho * A2pos * (temp2 + temp3) + temp4;
 }
 
 void flux_quad_GxIV(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -188,15 +188,15 @@ void flux_quad_GxIV(std::vector<double> &G, double nx, double ny, double u1, dou
 
         // Expressions for the split fluxes ..
 
-        G[1] = rho * A2pos * (ut * A1neg - B1);
+        G[0] = rho * A2pos * (ut * A1neg - B1);
 
         temp1 = pr_by_rho + ut * ut;
         temp2 = temp1 * A1neg - ut * B1;
-        G[2] = rho * A2pos * temp2;
+        G[1] = rho * A2pos * temp2;
 
         temp1 = ut * A1neg - B1;
         temp2 = un * A2pos + B2;
-        G[3] = rho * temp1 * temp2;
+        G[2] = rho * temp1 * temp2;
 
         temp1 = (7.0 * pr_by_rho) + u_sqr;
         temp2 = 0.5 * ut * temp1 * A1neg;
@@ -207,5 +207,5 @@ void flux_quad_GxIV(std::vector<double> &G, double nx, double ny, double u1, dou
         temp1 = ut * A1neg - B1;
         temp4 = 0.5 * rho * un * B2 * temp1;
 
-        G[4] = rho * A2pos * (temp2 - temp3) + temp4;
+        G[3] = rho * A2pos * (temp2 - temp3) + temp4;
 }

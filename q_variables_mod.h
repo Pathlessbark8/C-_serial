@@ -15,21 +15,21 @@ void eval_q_variables()
 
     for (int k = 1; k <= max_points; k++)
     {
-        rho = point.prim[1][k];
-        u1 = point.prim[2][k];
-        u2 = point.prim[3][k];
-        pr = point.prim[4][k];
+        rho = point.prim[0][k];
+        u1 = point.prim[1][k];
+        u2 = point.prim[2][k];
+        pr = point.prim[3][k];
 
         beta = 0.5 * rho / pr;
 
-        point.q[1][k] = log(rho) + (log(beta) * 2.5) - beta * (u1 * u1 + u2 * u2);
+        point.q[0][k] = log(rho) + (log(beta) * 2.5) - beta * (u1 * u1 + u2 * u2);
 
         two_times_beta = 2.0 * beta;
 
-        point.q[2][k] = two_times_beta * u1;
-        point.q[3][k] = two_times_beta * u2;
+        point.q[1][k] = two_times_beta * u1;
+        point.q[2][k] = two_times_beta * u2;
 
-        point.q[4][k] = -two_times_beta;
+        point.q[3][k] = -two_times_beta;
     }
 }
 
@@ -57,24 +57,24 @@ void eval_q_derivatives()
         sum_dely_sqr = 0.;
         sum_delx_dely = 0.;
 
-        for (int k = 1; k <= 4; k++)
+        for (int k = 0; k < 4; k++)
         {
+            point.qm[0][k][i] = point.q[k][i];
             point.qm[1][k][i] = point.q[k][i];
-            point.qm[2][k][i] = point.q[k][i];
         }
         std::vector<double> sum_delx_delq(5, 0.0), sum_dely_delq(5, 0.0);
         for (int k = 1; k <= point.nbhs[i]; k++)
         {
             nbh = point.conn[i][k];
-            for (int r = 1; r <= 4; r++)
+            for (int r = 0; r < 4; r++)
             {
-                if (point.q[r][nbh] > point.qm[1][r][i])
+                if (point.q[r][nbh] > point.qm[0][r][i])
+                {
+                    point.qm[0][r][i] = point.q[r][nbh];
+                }
+                if (point.q[r][nbh] < point.qm[1][r][i])
                 {
                     point.qm[1][r][i] = point.q[r][nbh];
-                }
-                if (point.q[r][nbh] < point.qm[2][r][i])
-                {
-                    point.qm[2][r][i] = point.q[r][nbh];
                 }
             }
             x_k = point.x[nbh];
@@ -91,7 +91,7 @@ void eval_q_derivatives()
 
             sum_delx_dely = sum_delx_dely + delx * dely * weights;
 
-            for (int r = 1; r <= 4; r++)
+            for (int r = 0; r < 4; r++)
             {
                 sum_delx_delq[r] = sum_delx_delq[r] + weights * delx * (point.q[r][nbh] - point.q[r][i]);
                 sum_dely_delq[r] = sum_dely_delq[r] + weights * dely * (point.q[r][nbh] - point.q[r][i]);
@@ -109,10 +109,10 @@ void eval_q_derivatives()
         det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
         one_by_det = 1.0 / det;
 
-        for (int k = 1; k <= 4; k++)
+        for (int k = 0; k < 4; k++)
         {
-            point.dq[1][k][i] = (sum_delx_delq[k] * sum_dely_sqr - sum_dely_delq[k] * sum_delx_dely) * one_by_det;
-            point.dq[2][k][i] = (sum_dely_delq[k] * sum_delx_sqr - sum_delx_delq[k] * sum_delx_dely) * one_by_det;
+            point.dq[0][k][i] = (sum_delx_delq[k] * sum_dely_sqr - sum_dely_delq[k] * sum_delx_dely) * one_by_det;
+            point.dq[1][k][i] = (sum_dely_delq[k] * sum_delx_sqr - sum_delx_delq[k] * sum_delx_dely) * one_by_det;
         }
     }
 }
@@ -154,10 +154,10 @@ void eval_q_inner_loop()
         sum_dely_delq3 = 0.;
         sum_dely_delq4 = 0.;
 
-        q1 = point.q[1][i];
-        q2 = point.q[2][i];
-        q3 = point.q[3][i];
-        q4 = point.q[4][i];
+        q1 = point.q[0][i];
+        q2 = point.q[1][i];
+        q3 = point.q[2][i];
+        q4 = point.q[3][i];
 
         for (int k = 1; k <= point.nbhs[i]; k++)
         {
@@ -177,23 +177,23 @@ void eval_q_inner_loop()
 
             sum_delx_dely = sum_delx_dely + delx * dely * weights;
 
-            temp1 = q1 - 0.5 * (delx * point.dq[1][1][i] + dely * point.dq[2][1][i]);
-            temp2 = point.q[1][nbh] - 0.5 * (delx * point.dq[1][1][nbh] + dely * point.dq[2][1][nbh]);
+            temp1 = q1 - 0.5 * (delx * point.dq[0][0][i] + dely * point.dq[1][0][i]);
+            temp2 = point.q[0][nbh] - 0.5 * (delx * point.dq[0][0][nbh] + dely * point.dq[1][0][nbh]);
             sum_delx_delq1 = sum_delx_delq1 + (weights * delx * (temp2 - temp1));
             sum_dely_delq1 = sum_dely_delq1 + (weights * dely * (temp2 - temp1));
 
-            temp1 = q2 - 0.5 * (delx * point.dq[1][2][i] + dely * point.dq[2][2][i]);
-            temp2 = point.q[2][nbh] - 0.5 * (delx * point.dq[1][2][nbh] + dely * point.dq[2][2][nbh]);
+            temp1 = q2 - 0.5 * (delx * point.dq[0][1][i] + dely * point.dq[1][1][i]);
+            temp2 = point.q[1][nbh] - 0.5 * (delx * point.dq[0][1][nbh] + dely * point.dq[1][1][nbh]);
             sum_delx_delq2 = sum_delx_delq2 + (weights * delx * (temp2 - temp1));
             sum_dely_delq2 = sum_dely_delq2 + (weights * dely * (temp2 - temp1));
 
-            temp1 = q3 - 0.5 * (delx * point.dq[1][3][i] + dely * point.dq[2][3][i]);
-            temp2 = point.q[3][nbh] - 0.5 * (delx * point.dq[1][3][nbh] + dely * point.dq[2][3][nbh]);
+            temp1 = q3 - 0.5 * (delx * point.dq[0][2][i] + dely * point.dq[1][2][i]);
+            temp2 = point.q[2][nbh] - 0.5 * (delx * point.dq[0][2][nbh] + dely * point.dq[1][2][nbh]);
             sum_delx_delq3 = sum_delx_delq3 + (weights * delx * (temp2 - temp1));
             sum_dely_delq3 = sum_dely_delq3 + (weights * dely * (temp2 - temp1));
 
-            temp1 = q4 - 0.5 * (delx * point.dq[1][4][i] + dely * point.dq[2][4][i]);
-            temp2 = point.q[4][nbh] - 0.5 * (delx * point.dq[1][4][nbh] + dely * point.dq[2][4][nbh]);
+            temp1 = q4 - 0.5 * (delx * point.dq[0][3][i] + dely * point.dq[1][3][i]);
+            temp2 = point.q[3][nbh] - 0.5 * (delx * point.dq[0][3][nbh] + dely * point.dq[1][3][nbh]);
             sum_delx_delq4 = sum_delx_delq4 + (weights * delx * (temp2 - temp1));
             sum_dely_delq4 = sum_dely_delq4 + (weights * dely * (temp2 - temp1));
         }
@@ -201,14 +201,14 @@ void eval_q_inner_loop()
         det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
         one_by_det = 1.0 / det;
 
-        point.temp[1][1][i] = one_by_det * (sum_delx_delq1 * sum_dely_sqr - sum_dely_delq1 * sum_delx_dely);
-        point.temp[1][2][i] = one_by_det * (sum_delx_delq2 * sum_dely_sqr - sum_dely_delq2 * sum_delx_dely);
-        point.temp[1][3][i] = one_by_det * (sum_delx_delq3 * sum_dely_sqr - sum_dely_delq3 * sum_delx_dely);
-        point.temp[1][4][i] = one_by_det * (sum_delx_delq4 * sum_dely_sqr - sum_dely_delq4 * sum_delx_dely);
-        point.temp[2][1][i] = one_by_det * (sum_dely_delq1 * sum_delx_sqr - sum_delx_delq1 * sum_delx_dely);
-        point.temp[2][2][i] = one_by_det * (sum_dely_delq2 * sum_delx_sqr - sum_delx_delq2 * sum_delx_dely);
-        point.temp[2][3][i] = one_by_det * (sum_dely_delq3 * sum_delx_sqr - sum_delx_delq3 * sum_delx_dely);
-        point.temp[2][4][i] = one_by_det * (sum_dely_delq4 * sum_delx_sqr - sum_delx_delq4 * sum_delx_dely);
+        point.temp[0][0][i] = one_by_det * (sum_delx_delq1 * sum_dely_sqr - sum_dely_delq1 * sum_delx_dely);
+        point.temp[0][1][i] = one_by_det * (sum_delx_delq2 * sum_dely_sqr - sum_dely_delq2 * sum_delx_dely);
+        point.temp[0][2][i] = one_by_det * (sum_delx_delq3 * sum_dely_sqr - sum_dely_delq3 * sum_delx_dely);
+        point.temp[0][3][i] = one_by_det * (sum_delx_delq4 * sum_dely_sqr - sum_dely_delq4 * sum_delx_dely);
+        point.temp[1][0][i] = one_by_det * (sum_dely_delq1 * sum_delx_sqr - sum_delx_delq1 * sum_delx_dely);
+        point.temp[1][1][i] = one_by_det * (sum_dely_delq2 * sum_delx_sqr - sum_delx_delq2 * sum_delx_dely);
+        point.temp[1][2][i] = one_by_det * (sum_dely_delq3 * sum_delx_sqr - sum_delx_delq3 * sum_delx_dely);
+        point.temp[1][3][i] = one_by_det * (sum_dely_delq4 * sum_delx_sqr - sum_delx_delq4 * sum_delx_dely);
     }
 }
 
@@ -216,14 +216,14 @@ void eval_update_innerloop()
 {
     for (int i = 1; i <= local_points; i++)
     {
+        point.dq[0][0][i] = point.temp[0][0][i];
+        point.dq[0][1][i] = point.temp[0][1][i];
+        point.dq[0][2][i] = point.temp[0][2][i];
+        point.dq[0][3][i] = point.temp[0][3][i];
+        point.dq[1][0][i] = point.temp[1][0][i];
         point.dq[1][1][i] = point.temp[1][1][i];
         point.dq[1][2][i] = point.temp[1][2][i];
         point.dq[1][3][i] = point.temp[1][3][i];
-        point.dq[1][4][i] = point.temp[1][4][i];
-        point.dq[2][1][i] = point.temp[2][1][i];
-        point.dq[2][2][i] = point.temp[2][2][i];
-        point.dq[2][3][i] = point.temp[2][3][i];
-        point.dq[2][4][i] = point.temp[2][4][i];
     }
 }
 
@@ -233,10 +233,10 @@ void qtilde_to_primitive(std::vector<double> &qtilde, double &u1, double &u2, do
     double beta, temp, temp1, temp2;
     double q1, q2, q3, q4;
 
-    q1 = qtilde[1];
-    q2 = qtilde[2];
-    q3 = qtilde[3];
-    q4 = qtilde[4];
+    q1 = qtilde[0];
+    q2 = qtilde[1];
+    q3 = qtilde[2];
+    q4 = qtilde[3];
 
     beta = -q4 * 0.5;
 

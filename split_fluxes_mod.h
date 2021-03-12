@@ -27,19 +27,19 @@ void flux_Gxp(std::vector<double> &Gxp, double nx, double ny, double u1, double 
 
     //  Expressions for the split fluxes ..
 
-    Gxp[1] = rho * (ut * A1pos + B1);
+    Gxp[0] = rho * (ut * A1pos + B1);
 
     temp1 = pr_by_rho + ut * ut;
     temp2 = temp1 * A1pos + ut * B1;
-    Gxp[2] = rho * temp2;
+    Gxp[1] = rho * temp2;
 
     temp1 = ut * un * A1pos + un * B1;
-    Gxp[3] = rho * temp1;
+    Gxp[2] = rho * temp1;
 
     temp1 = (7.0 * pr_by_rho) + u_sqr;
     temp2 = 0.5 * ut * temp1 * A1pos;
     temp1 = (6.0 * pr_by_rho) + u_sqr;
-    Gxp[4] = rho * (temp2 + 0.5 * temp1 * B1);
+    Gxp[3] = rho * (temp2 + 0.5 * temp1 * B1);
 }
 
 void flux_Gxn(std::vector<double> &Gxn, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -68,19 +68,19 @@ void flux_Gxn(std::vector<double> &Gxn, double nx, double ny, double u1, double 
 
     // 	Expressions for the split fluxes ..
 
-    Gxn[1] = rho * (ut * A1neg - B1);
+    Gxn[0] = rho * (ut * A1neg - B1);
 
     temp1 = pr_by_rho + ut * ut;
     temp2 = temp1 * A1neg - ut * B1;
-    Gxn[2] = rho * temp2;
+    Gxn[1] = rho * temp2;
 
     temp1 = ut * un * A1neg - un * B1;
-    Gxn[3] = rho * temp1;
+    Gxn[2] = rho * temp1;
 
     temp1 = (7.0 * pr_by_rho) + u_sqr;
     temp2 = 0.5 * ut * temp1 * A1neg;
     temp1 = (6.0 * pr_by_rho) + u_sqr;
-    Gxn[4] = rho * (temp2 - 0.5 * temp1 * B1);
+    Gxn[3] = rho * (temp2 - 0.5 * temp1 * B1);
 }
 
 void flux_Gyp(std::vector<double> &Gyp, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -109,19 +109,19 @@ void flux_Gyp(std::vector<double> &Gyp, double nx, double ny, double u1, double 
 
     // Expressions for the split fluxes ..
 
-    Gyp[1] = rho * (un * A2pos + B2);
+    Gyp[0] = rho * (un * A2pos + B2);
 
     temp1 = pr_by_rho + un * un;
     temp2 = temp1 * A2pos + un * B2;
-    Gyp[3] = rho * temp2;
+    Gyp[2] = rho * temp2;
 
     temp1 = ut * un * A2pos + ut * B2;
-    Gyp[2] = rho * temp1;
+    Gyp[1] = rho * temp1;
 
     temp1 = (7.0 * pr_by_rho) + u_sqr;
     temp2 = 0.5 * un * temp1 * A2pos;
     temp1 = (6.0 * pr_by_rho) + u_sqr;
-    Gyp[4] = rho * (temp2 + 0.5 * temp1 * B2);
+    Gyp[3] = rho * (temp2 + 0.5 * temp1 * B2);
 }
 
 void flux_Gyn(std::vector<double> &Gyn, double nx, double ny, double u1, double u2, double rho, double pr)
@@ -148,17 +148,17 @@ void flux_Gyn(std::vector<double> &Gyn, double nx, double ny, double u1, double 
 
     // Expressions for the split fluxes ..
 
-    Gyn[1] = rho * (un * A2neg - B2);
+    Gyn[0] = rho * (un * A2neg - B2);
 
     temp1 = pr_by_rho + un * un;
     temp2 = temp1 * A2neg - un * B2;
-    Gyn[3] = rho * temp2;
+    Gyn[2] = rho * temp2;
 
     temp1 = ut * un * A2neg - ut * B2;
-    Gyn[2] = rho * temp1;
+    Gyn[1] = rho * temp1;
 
     temp1 = (7.0 * pr_by_rho) + u_sqr;
     temp2 = 0.5 * un * temp1 * A2neg;
     temp1 = (6.0 * pr_by_rho) + u_sqr;
-    Gyn[4] = rho * (temp2 - 0.5 * temp1 * B2);
+    Gyn[3] = rho * (temp2 - 0.5 * temp1 * B2);
 }

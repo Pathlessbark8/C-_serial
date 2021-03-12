@@ -48,7 +48,7 @@ void compute_cl_cd_cm()
         nx = point.nx[m];
         ny = point.ny[m];
 
-        cp = point.prim[4][m] - pr_inf;
+        cp = point.prim[3][m] - pr_inf;
         cp = -cp / temp;
 
         fout << point.flag_2[m], point.x[m], cp;
@@ -59,7 +59,7 @@ void compute_cl_cd_cm()
         pitch_mom[point.flag_2[m]] = pitch_mom[point.flag_2[m]] + (-cp * ny * ds * (mx - 0.25) + cp * nx * ds * (my));
     }
 
-    for (int j = 1; j <= shapes; j++)
+    for (int j = 0; j < shapes; j++)
     {
         Cl[j] = V[j] * cos(theta) - H[j] * sin(theta);
         Cd[j] = H[j] * cos(theta) + V[j] * sin(theta);

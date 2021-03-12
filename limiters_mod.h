@@ -9,7 +9,7 @@ void max_q_value(int i, std::vector<double> &maxi)
 {
     int j, k, r;
 
-    for (int j = 1; j <= 4; j++)
+    for (int j = 0; j < 4; j++)
     {
         maxi[j] = point.q[j][i];
     }
@@ -17,7 +17,7 @@ void max_q_value(int i, std::vector<double> &maxi)
     for (j = 1; j <= point.nbhs[i]; j++)
     {
         k = point.conn[i][j];
-        for (int r = 1; r <= 4; r++)
+        for (int r = 0; r < 4; r++)
         {
             if (maxi[r] < point.q[r][k])
             {
@@ -32,7 +32,7 @@ void min_q_value(int i, std::vector<double> &mini)
 
     int j, k, r;
 
-    for (int j = 1; j <= 4; j++)
+    for (int j = 0; j <4; j++)
     {
         mini[j] = point.q[j][i];
     }
@@ -40,7 +40,7 @@ void min_q_value(int i, std::vector<double> &mini)
     for (j = 1; j <= point.nbhs[i]; j++)
     {
         k = point.conn[i][j];
-        for (int r = 1; r <= 4; r++)
+        for (int r = 0; r < 4; r++)
         {
             if (mini[r] > point.q[r][k])
             {
@@ -59,7 +59,7 @@ void venkat_limiter(std::vector<double> &qtilde, std::vector<double> &phi, int k
     double q, del_neg, del_pos;
     double max_q, min_q, ds, epsi, num, den, temp;
 
-    for (r = 1; r <= 4; r++)
+    for (r = 0; r < 4; r++)
     {
         q = point.q[r][k];
         del_neg = qtilde[r] - q;
@@ -71,12 +71,12 @@ void venkat_limiter(std::vector<double> &qtilde, std::vector<double> &phi, int k
         {
             if (del_neg > 0)
             {
-                del_pos = point.qm[1][r][k] - q;
+                del_pos = point.qm[0][r][k] - q;
             }
 
             else if (del_neg < 0)
             {
-                del_pos = point.qm[2][r][k] - q;
+                del_pos = point.qm[1][r][k] - q;
             }
 
             epsi = VL_CONST * point.min_dist[k];

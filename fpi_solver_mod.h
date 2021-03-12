@@ -18,7 +18,7 @@ void fpi_solver(int temp1)
         int i, rk;
         for (i = 1; i <= max_points; i++)
         {
-                for (int j = 1; j <= 4; j++)
+                for (int j = 0; j < 4; j++)
                 {
                         point.prim_old[j][i] = point.prim[j][i];
                 }
@@ -26,11 +26,11 @@ void fpi_solver(int temp1)
         // cout<<setprecision(14)<<std::scientific;
         // for(int r=1;r<=4;r++)
         // {
-        //         cout<<point.prim[r][1]<<" ";
+        //         cout<<point.prim[r][0]<<" ";
         // }
         // cout<<endl;
         func_delta();
-        // std::cout << "delta " << point.delta[1] << endl;
+        // std::cout << "delta " << point.delta[0] << endl;
 
         // printf("THis is temp1:%d\n", temp1);
         //    Perform 4-stage, 3-order SSPRK update
@@ -40,7 +40,7 @@ void fpi_solver(int temp1)
                 // std::cout << "\nq" << endl;
                 // for (int i = 1; i <= 4; i++)
                 // {
-                //         std::cout << point.q[i][1] << " ";
+                //         std::cout << point.q[i][0] << " ";
                 // }
                 // std::cout << endl
                 //           << endl;
@@ -62,7 +62,7 @@ void fpi_solver(int temp1)
                 // cout << "flux_res" << endl;
                 // for (int r = 1; r <= 4; r++)
                 // {
-                //         cout << point.flux_res[r][1] << " ";
+                //         cout << point.flux_res[r][0] << " ";
                 // }
                 // cout << endl;
                 // cout<<"Euler :"<<euler<<endl;
@@ -70,13 +70,13 @@ void fpi_solver(int temp1)
                 // for (int i = 1; i <= 4; i++)
                 // {
 
-                //         cout << point.prim[i][1] << " ";
+                //         cout << point.prim[i][0] << " ";
                 // }
                 if (rk == 1)
                 {
                         // for(int i=1;i<=4;i++)
                         // {
-                        //         std::cout<<point.prim[i][1]<<" ";
+                        //         std::cout<<point.prim[i][0]<<" ";
                         // }
                         // cout<<endl;
                 }
@@ -88,49 +88,49 @@ void fpi_solver(int temp1)
         // cout<<"\nq"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
-        //         cout << point.q[i][1] <<  " ";
+        //         cout << point.q[i][0] <<  " ";
         // }
         // cout<<"\ndq1"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.dq[1][i][2]<<  " " ;
+        //         cout << point.dq[0][i][1]<<  " " ;
         // }
         // cout<<"\ndq2"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.dq[2][i][160] <<  " ";
+        //         cout << point.dq[1][i][160] <<  " ";
         // }
         // cout<<"\nprim"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.prim[i][1] <<  " ";
+        //         cout << point.prim[i][0] <<  " ";
         // }
         // cout<<"\nflux_res"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.flux_res[i][1] <<  " ";
+        //         cout << point.flux_res[i][0] <<  " ";
         // }
         // cout<<"\nqm1"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.qm[1][i][1]<<  " " ;
+        //         cout << point.qm[0][i][0]<<  " " ;
         // }
         // cout<<"\nqm2"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.qm[2][i][1] <<  " ";
+        //         cout << point.qm[1][i][0] <<  " ";
         // }
         // cout<<"\nprim"<<endl;
         // for (int i = 1; i <= 4; i++)
         // {
 
-        //         cout << point.prim[i][1] <<  " ";
+        //         cout << point.prim[i][0] <<  " ";
         // }
         // cout<<endl;
         // objective_function();
