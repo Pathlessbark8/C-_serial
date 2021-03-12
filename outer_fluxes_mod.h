@@ -8,7 +8,7 @@
 
 // This subroutine evaluates the wall flux derivative dGs_pos
 
-void outer_dGx_pos(std::vector<double> G, int i)
+void outer_dGx_pos(std::vector<double> &G, int i)
 {
 
     int j, k, r;
@@ -100,7 +100,7 @@ void outer_dGx_pos(std::vector<double> G, int i)
 
 // This subroutine evaluates the wall flux derivative dGs_neg
 
-void outer_dGx_neg(std::vector<double> G, int i)
+void outer_dGx_neg(std::vector<double> &G, int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
@@ -192,7 +192,7 @@ void outer_dGx_neg(std::vector<double> G, int i)
     }
 }
 
-void outer_dGy_pos(std::vector<double> G, int i)
+void outer_dGy_pos(std::vector<double> &G, int i)
 
 {
 
