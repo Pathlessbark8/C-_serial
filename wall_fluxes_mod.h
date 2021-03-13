@@ -8,24 +8,24 @@
 
 // This subroutine evaluates the wall flux derivative dGs_pos
 
-void wall_dGx_pos(std::vector<double> &G, int i)
+void wall_dGx_pos(double G[], int i)
 {
 
     int j, k, r;
     double rho, u1, u2, pr;
     double tx, ty, nx, ny;
     double x_i, y_i, x_k, y_k;
-    std::vector<double> G_i(4), G_k(4);
+    double G_i[4], G_k[4];
     double delx, dely, det, one_by_det;
     double dels, deln;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    std::vector<double> sum_delx_delf(5, 0), sum_dely_delf(5, 0);
+    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
     double temp;
-    std::vector<double> qtilde_i(4), qtilde_k(4);
-    std::vector<double> phi_i(4), phi_k(4);
+    double qtilde_i[4], qtilde_k[4];
+    double phi_i[4], phi_k[4];
     double dels_weights, deln_weights;
-    std::vector<double> maxi(4), mini(4);
+    double maxi[4], mini[4];
 
     sum_delx_sqr = 0.0;
     sum_dely_sqr = 0.0;
@@ -100,23 +100,23 @@ void wall_dGx_pos(std::vector<double> &G, int i)
 
 // This subroutine evaluates the wall flux derivative dGs_neg
 
-void wall_dGx_neg(std::vector<double> &G, int i)
+void wall_dGx_neg(double G[], int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
-    std::vector<double> G_i(4), G_k(4);
+    double G_i[4], G_k[4];
     double delx, dely, det, one_by_det;
     double dels, deln;
 
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    std::vector<double> sum_delx_delf(5, 0), sum_dely_delf(5, 0);
+    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
     double temp;
-    std::vector<double> qtilde_i(4), qtilde_k(4);
-    std::vector<double> phi_i(4), phi_k(4);
-    std::vector<double> maxi(4), mini(4);
+    double qtilde_i[4], qtilde_k[4];
+    double phi_i[4], phi_k[4];
+    double maxi[4], mini[4];
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;
@@ -192,23 +192,23 @@ void wall_dGx_neg(std::vector<double> &G, int i)
     }
 }
 
-void wall_dGy_neg(std::vector<double> &G, int i)
+void wall_dGy_neg(double G[], int i)
 {
     int j, k, r;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
-    std::vector<double> G_i(4), G_k(4);
+    double G_i[4], G_k[4];
     double delx, dely, det, one_by_det;
     double dels, deln;
 
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    std::vector<double> sum_delx_delf(5, 0), sum_dely_delf(5, 0);
+    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
     double temp;
-    std::vector<double> qtilde_i(4), qtilde_k(4);
-    std::vector<double> phi_i(4), phi_k(4);
-    std::vector<double> maxi(4), mini(4);
+    double qtilde_i[4], qtilde_k[4];
+    double phi_i[4], phi_k[4];
+    double maxi[4], mini[4];
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;

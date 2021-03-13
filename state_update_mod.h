@@ -5,17 +5,8 @@
 #include <vector>
 #include <iostream>
 
-std::vector<double> return_column(std::vector<std::vector<double>> a, int k)
-{
-    std::vector<double> temp;
-    for (int i = 1; i <= 4; i++)
-    {
-        temp.push_back(a[i][k]);
-    }
-    return temp;
-}
 
-void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std::vector<double> &U)
+void primitive_to_conserved(double prim[], double nx, double ny, double U[])
 {
 
     double rho;
@@ -32,7 +23,7 @@ void primitive_to_conserved(std::vector<double> prim, double nx, double ny, std:
     U[2] = temp1 * nx + temp2 * ny;
 }
 
-void conserved_vector_Ubar(std::vector<double> prim, std::vector<double> &Ubar, double nx, double ny)
+void conserved_vector_Ubar( double prim[], double Ubar[], double nx, double ny)
 
 {
 
@@ -95,7 +86,7 @@ void state_update(int rk)
 
     int i, k, r;
     double delt;
-    std::vector<double> U(4), U_old(4);
+    double U[4], U_old[4];
     double res_sqr;
     double temp;
     double nx, ny;
@@ -116,12 +107,12 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-            std::vector<double> temp1(4);
+            double temp1[4];
             for (int r = 0; r < 4; r++)
             {
                 temp1[r] = point.prim[r][k];
             }
-            std::vector<double> temp2(4);
+            double temp2[4];
             for (int r = 0; r < 4; r++)
             {
                 temp2[r] = point.prim_old[r][k];
@@ -176,12 +167,12 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-            std::vector<double> temp1(4);
+            double temp1[4];
             for (int r = 0; r < 4; r++)
             {
                 temp1[r] = point.prim[r][k];
             }
-            std::vector<double> temp2(4);
+            double temp2[4];
             for (int r = 0; r < 4; r++)
             {
                 temp2[r] = point.prim_old[r][k];
@@ -235,12 +226,12 @@ void state_update(int rk)
 
             nx = point.nx[k];
             ny = point.ny[k];
-            std::vector<double> temp1(4);
+            double temp1[4];
             for (int r = 0; r < 4; r++)
             {
                 temp1[r] = point.prim[r][k];
             }
-            std::vector<double> temp2(4);
+            double temp2[4];
             for (int r = 0; r < 4; r++)
             {
                 temp2[r] = point.prim_old[r][k];

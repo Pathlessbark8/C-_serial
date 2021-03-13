@@ -62,7 +62,7 @@ void eval_q_derivatives()
             point.qm[0][k][i] = point.q[k][i];
             point.qm[1][k][i] = point.q[k][i];
         }
-        std::vector<double> sum_delx_delq(5, 0.0), sum_dely_delq(5, 0.0);
+        double sum_delx_delq[4]={}, sum_dely_delq[4]={};
         for (int k = 1; k <= point.nbhs[i]; k++)
         {
             nbh = point.conn[i][k];
@@ -227,7 +227,7 @@ void eval_update_innerloop()
     }
 }
 
-void qtilde_to_primitive(std::vector<double> &qtilde, double &u1, double &u2, double &rho, double &pr)
+void qtilde_to_primitive(double qtilde[], double &u1, double &u2, double &rho, double &pr)
 
 {
     double beta, temp, temp1, temp2;

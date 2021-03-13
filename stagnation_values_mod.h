@@ -10,7 +10,7 @@ void stagnation_pressure()
 
     int i, indexMin, indexMax;
     double p0_inf, gammaPower, pMin, pMax, p0, mach_t, angle;
-    std::vector<double> prim(4);
+    double prim[4];
 
     gammaPower = gamma_new / (gamma_new - 1);
     p0_inf = pr_inf * (pow((1 + ((gamma_new - 1) / 2) * mach * mach), gammaPower));
@@ -51,7 +51,7 @@ void objective_function_J()
 
     int i;
     double p0_inf, gammaPower, p0, p0_sum, constant, angle, mach_t;
-    std::vector<double> prim(4);
+    double prim[4];
 
     double total_p0;
 

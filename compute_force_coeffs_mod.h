@@ -13,7 +13,10 @@ void compute_cl_cd_cm()
     double lx, ly, mx, my, rx, ry;
     double ds1, ds2, ds;
 
-    std::vector<double> H(shapes + 1, 0), V(shapes + 1, 0), pitch_mom(shapes + 1, 0);
+    // std::vector<double> H(shapes + 1, 0), V(shapes + 1, 0), pitch_mom(shapes + 1, 0);
+    double H[shapes+1]={};
+    double V[shapes+1]={};
+    double pitch_mom[shapes+1]={};
     double nx, ny;
     char cp_file[] = "cp-file";
 
@@ -63,7 +66,8 @@ void compute_cl_cd_cm()
     {
         Cl[j] = V[j] * cos(theta) - H[j] * sin(theta);
         Cd[j] = H[j] * cos(theta) + V[j] * sin(theta);
-        Cm = pitch_mom;
+        // Cm = pitch_mom;
+        std::copy(std::begin(pitch_mom), std::end(pitch_mom), std::begin(Cm));
     }
     fout.close();
 }

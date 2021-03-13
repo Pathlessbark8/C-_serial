@@ -3,7 +3,7 @@
 // This module consists of quadrant split fluxes
 // with respect to the x-coordinate direction ..
 
-void flux_quad_GxI(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_quad_GxI(double G[], double nx, double ny, double u1, double u2, double rho, double pr)
 {
 
         double tx, ty, ut, un;
@@ -54,7 +54,7 @@ void flux_quad_GxI(std::vector<double> &G, double nx, double ny, double u1, doub
         G[3] = rho * A2neg * (temp2 - temp3) - temp4;
 }
 
-void flux_quad_GxII(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_quad_GxII(double G[], double nx, double ny, double u1, double u2, double rho, double pr)
 {
         double tx, ty, ut, un;
         double beta;
@@ -105,7 +105,7 @@ void flux_quad_GxII(std::vector<double> &G, double nx, double ny, double u1, dou
         G[3] = rho * A2neg * (temp2 + temp3) - temp4;
 }
 
-void flux_quad_GxIII(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_quad_GxIII(double G[], double nx, double ny, double u1, double u2, double rho, double pr)
 
 {
 
@@ -158,7 +158,7 @@ void flux_quad_GxIII(std::vector<double> &G, double nx, double ny, double u1, do
         G[3] = rho * A2pos * (temp2 + temp3) + temp4;
 }
 
-void flux_quad_GxIV(std::vector<double> &G, double nx, double ny, double u1, double u2, double rho, double pr)
+void flux_quad_GxIV(double G[], double nx, double ny, double u1, double u2, double rho, double pr)
 {
 
         double tx, ty, ut, un;

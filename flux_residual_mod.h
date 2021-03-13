@@ -11,7 +11,7 @@ void cal_flux_residual()
 
 {
     int i, k;
-    std::vector<double> Gxp(4), Gxn(4), Gyp(4), Gyn(4);
+    double Gxp[4], Gxn[4], Gyp[4], Gyn[4];
 
     for (int i = 1; i <= max_points; ++i)
     {

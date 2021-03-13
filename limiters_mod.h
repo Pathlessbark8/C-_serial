@@ -5,7 +5,7 @@
 
 // The following two subroutines are used for min-max limiter ..
 
-void max_q_value(int i, std::vector<double> &maxi)
+void max_q_value(int i, double maxi[])
 {
     int j, k, r;
 
@@ -27,7 +27,7 @@ void max_q_value(int i, std::vector<double> &maxi)
     }
 }
 
-void min_q_value(int i, std::vector<double> &mini)
+void min_q_value(int i, double mini[])
 {
 
     int j, k, r;
@@ -52,7 +52,7 @@ void min_q_value(int i, std::vector<double> &mini)
 
 // The following subroutines are used for venkatakrishnan limiter ..
 
-void venkat_limiter(std::vector<double> &qtilde, std::vector<double> &phi, int k)
+void venkat_limiter(double qtilde[], double phi[], int k)
 {
 
     int r;

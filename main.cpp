@@ -15,18 +15,18 @@ int main()
 
     fstream fin;
     fin.open("/opt/grids/legacy/part/partGrid9600", ios::in);
-    fin >> max_points;
-    point.x = std::vector<double>(max_points + 1);
-    point.y = std::vector<double>(max_points + 1);
-    point.left = std::vector<int>(max_points + 1);
-    point.right = std::vector<int>(max_points + 1);
-    point.flag_1 = std::vector<int>(max_points + 1);
-    point.flag_2 = std::vector<int>(max_points + 1);
-    point.nbhs = std::vector<int>(max_points + 1);
-    point.min_dist = std::vector<double>(max_points + 1);
-    point.conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
-    point.nx = std::vector<double>(max_points + 1);
-    point.ny = std::vector<double>(max_points + 1);
+    fin >> local_points;
+    // point.x = std::vector<double>(max_points + 1);
+    // point.y = std::vector<double>(max_points + 1);
+    // point.left = std::vector<int>(max_points + 1);
+    // point.right = std::vector<int>(max_points + 1);
+    // point.flag_1 = std::vector<int>(max_points + 1);
+    // point.flag_2 = std::vector<int>(max_points + 1);
+    // point.nbhs = std::vector<int>(max_points + 1);
+    // point.min_dist = std::vector<double>(max_points + 1);
+    // point.conn = std::vector<std::vector<int>>(max_points + 1, std::vector<int>(20 ));
+    // point.nx = std::vector<double>(max_points + 1);
+    // point.ny = std::vector<double>(max_points + 1);
     for (int i = 1; i <= max_points; i++)
     {
         fin >> point.x[i] >> point.y[i] >> point.left[i] >> point.right[i] >> point.flag_1[i] >> point.flag_2[i] >> point.min_dist[i] >> point.nbhs[i];
@@ -34,26 +34,26 @@ int main()
         {
             fin >> point.conn[i][r];
         }
-        if (point.flag_1[i] == 0)
-        {
-            wall_points = wall_points + 1;
-            wall_points_index.push_back(i);
-        }
-        else if (point.flag_1[i] == 1)
-        {
-            interior_points = interior_points + 1;
-            interior_points_index.push_back(i);
-        }
-        else if (point.flag_1[i] == 2)
-        {
-            outer_points = outer_points + 1;
-            outer_points_index.push_back(i);
-        }
+        // if (point.flag_1[i] == 0)
+        // {
+        //     wall_points = wall_points + 1;
+        //     wall_points_index.push_back(i);
+        // }
+        // else if (point.flag_1[i] == 1)
+        // {
+        //     interior_points = interior_points + 1;
+        //     interior_points_index.push_back(i);
+        // }
+        // else if (point.flag_1[i] == 2)
+        // {
+        //     outer_points = outer_points + 1;
+        //     outer_points_index.push_back(i);
+        // }
 
-        if (point.flag_2[i] > 0)
-        {
-            shape_points = shape_points + 1;
-        }
+        // if (point.flag_2[i] > 0)
+        // {
+        //     shape_points = shape_points + 1;
+        // }
         // cout << point.x[i] << " " << point.y[i] << " " << point.left[i] << " " << point.right[i] << " " << point.flag_1[i] << " " << point.flag_2[i] << " " << point.min_dist[i] << " " << point.nbhs[i] << endl;
     }
     allocate_soln();
