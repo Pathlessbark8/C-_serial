@@ -82,7 +82,7 @@ int rks = 4;
 double euler = 1.0;
 double total_loss_stagpressure;
 double res_old = 0, res_new = 0, residue, max_res = 0;
-double gsum_res_sqr = 0, sum_res_sqr = 0;
+double sum_res_sqr = 0;
 int max_res_point = 0;
 //    No of shapes
 const int shapes = 1;
@@ -94,7 +94,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.1;
 
-int max_iters = 50;
+int max_iters = 1000;
 
 // Unsteady variables
 double t, tfinal, dtg;

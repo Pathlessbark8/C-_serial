@@ -1,9 +1,5 @@
 #pragma once
 
-// !	First written on 14.10.2016
-// !	updated on Dec 26, 2016
-// !	updated on Dec 29, 2016
-
 #include "data_structure_mod.h"
 #include "point_normals_mod.h"
 #include "generate_connectivity_mod.h"
@@ -11,12 +7,6 @@
 #include "initial_conditions_mod.h"
 #include <cuda_runtime.h>
 
-
-// __global__ void test(points* point_d){
-
-//         (*point_d).x[1] += 1000000;
-
-// }
 
 void q_lskum()
 
@@ -36,14 +26,15 @@ void q_lskum()
         points *point_d;
         int point_size = sizeof(point);
         cudaStream_t stream;
+        cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
 
         cudaMalloc(&point_d, point_size);
         cudaMemcpy(point_d, &point, point_size, cudaMemcpyHostToDevice);
 
-        fpi_solver_cuda(point_d);
+        cudaDeviceSynchronize();
+
+        fpi_solver_cuda(point_d, stream);
 
         cudaMemcpy(&point, point_d, point_size, cudaMemcpyDeviceToHost);
         cudaFree(point_d);
-
-        // cout << point.prim[0][1] << endl;
 }

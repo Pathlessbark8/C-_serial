@@ -415,7 +415,7 @@ __global__ void state_update_cuda(points &point, int rk, int euler, double mach,
 
         res_sqr = (U[0] - temp) * (U[0] - temp);
 
-        sum_res_sqr[i] = res_sqr;
+        sum_res_sqr[i - 1] = res_sqr;
 
         point.prim[0][k] = U[0];
         temp = 1.0 / U[0];
@@ -468,7 +468,7 @@ __global__ void state_update_cuda(points &point, int rk, int euler, double mach,
 
         res_sqr = (U[0] - temp) * (U[0] - temp);
 
-        sum_res_sqr[i] = res_sqr;
+        sum_res_sqr[i - 1] = res_sqr;
 
         point.prim[0][k] = U[0];
         temp = 1.0 / U[0];

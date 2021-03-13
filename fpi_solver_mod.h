@@ -9,8 +9,10 @@
 #include <iostream>
 #include <iomanip>
 #include "dump.h"
+#include <fstream>
 
-#include <cub/device/device_reduce.cuh>
+#include <thrust/reduce.h>
+#include <thrust/execution_policy.h>
 
 using namespace std;
 
@@ -61,7 +63,7 @@ void fpi_solver(int temp1)
         cout << "Iterations "<< it << " Residue : " << residue << "\n";
 }
 
-void fpi_solver_cuda(points* point_d)
+void fpi_solver_cuda(points* point_d, cudaStream_t stream)
 
 {
     if (restart == 0)
@@ -69,22 +71,17 @@ void fpi_solver_cuda(points* point_d)
         itr = 0;
     }
 
+    remove("residue");
+
     dim3 threads(threads_per_block, 1, 1);
     dim3 grid(ceil(max_points + 1 / threads.x), 1, 1);
 
-    double *sum_res_sqr_d;
-    double sum_res_sqr_h[max_points + 1] = {0};
-    double *sum_res_sqr_result_d;
-
-    size_t temp_storage_bytes;
-    int* temp_storage=NULL;
-
-    cudaMalloc(&sum_res_sqr_d, sizeof(double) * (max_points + 1));
-    cudaMemcpy(sum_res_sqr_d, &sum_res_sqr_h, sizeof(sum_res_sqr_h), cudaMemcpyHostToDevice);
-    cudaMalloc(&sum_res_sqr_result_d, sizeof(double));
-
-    cub::DeviceReduce::Sum(temp_storage, temp_storage_bytes, sum_res_sqr_d, sum_res_sqr_result_d, max_points);
-
+    double *sum_res_sqr_d = NULL;
+    // double *sum_res_sqr_h = new double[max_points];
+    
+    cudaMalloc(&sum_res_sqr_d, sizeof(double) * max_points);
+    cudaDeviceSynchronize();
+    
     for (it = itr + 1; it <= itr + max_iters; it++)
     {
         func_delta_cuda<<<grid, threads>>>(*point_d, CFL);
@@ -98,24 +95,24 @@ void fpi_solver_cuda(points* point_d)
             }
             cal_flux_residual_cuda<<<grid, threads>>>(*point_d, power, VL_CONST, gamma_new);
             state_update_cuda<<<grid, threads>>>(*point_d, rk, euler, mach, theta, sum_res_sqr_d);
+            cudaDeviceSynchronize();
+            sum_res_sqr = thrust::reduce(thrust::cuda::par.on(stream), sum_res_sqr_d, sum_res_sqr_d + max_points, 0.0);
         }
-        cub::DeviceReduce::Sum(temp_storage, temp_storage_bytes, sum_res_sqr_d, sum_res_sqr_result_d, max_points);
-        cudaMemcpy(&sum_res_sqr, sum_res_sqr_result_d, sizeof(double), cudaMemcpyDeviceToHost);
 
-        cout << sum_res_sqr << endl;
+        res_new = sqrt(sum_res_sqr) / max_points;
+        if (it <= 2 && restart == 0)
+        {
+            res_old = res_new;
+            residue = 0;
+        }
+        else
+        {
+            residue = log10(res_new / res_old);
+        }
 
-        // res_new = sqrt(sum_res_sqr) / max_points;
-        // if (it <= 2 && restart == 0)
-        // {
-        //     res_old = res_new;
-        //     residue = 0;
-        // }
-        // else
-        // {
-        //     residue = log10(res_new / res_old);
-        // }
-
-        cout << "Iterations "<< it << " Residue : " << residue << "\n";
+        cout << "Iterations "<< it << " Residue : " << setprecision(16) << residue << "\n";
+        ofstream outfile;
+        outfile.open("residue", std::ios_base::app);
+        outfile << it << " " << setprecision(16) << residue << "\n";
     }
-
 }
