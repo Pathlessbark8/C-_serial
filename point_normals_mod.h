@@ -10,7 +10,7 @@ void compute_normals()
     double nx1, nx2, ny1, ny2, nx, ny;
     double det;
 
-    int i, j, k, l, m, r;
+    int l, m, r;
 
     // Finding the normals for the points on the shapes ..
 

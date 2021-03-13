@@ -7,7 +7,7 @@
 
 void max_q_value(int i, double maxi[])
 {
-    int j, k, r;
+    int j, k;
 
     for (int j = 0; j < 4; j++)
     {
@@ -30,7 +30,7 @@ void max_q_value(int i, double maxi[])
 void min_q_value(int i, double mini[])
 {
 
-    int j, k, r;
+    int j, k;
 
     for (int j = 0; j <4; j++)
     {
@@ -57,7 +57,7 @@ void venkat_limiter(double qtilde[], double phi[], int k)
 
     int r;
     double q, del_neg, del_pos;
-    double max_q, min_q, ds, epsi, num, den, temp;
+    double epsi, num, den, temp;
 
     for (r = 0; r < 4; r++)
     {
@@ -108,7 +108,7 @@ __device__ void venkat_limiter_cuda(points &point, double qtilde[], double phi[]
 
     int r;
     double q, del_neg, del_pos;
-    double max_q, min_q, ds, epsi, num, den, temp;
+    double epsi, num, den, temp;
 
     for (r = 0; r < 4; r++)
     {

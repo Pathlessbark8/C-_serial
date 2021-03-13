@@ -155,8 +155,7 @@ __device__ void conserved_vector_Ubar_cuda(double prim[], double Ubar[], double 
 void state_update(int rk)
 
 {
-    int i, k, r;
-    double delt;
+    int i, k;
     double U[4], U_old[4];
     double res_sqr;
     double temp;
@@ -350,8 +349,7 @@ void state_update(int rk)
 __global__ void state_update_cuda(points &point, int rk, int euler, double mach, double theta, double sum_res_sqr[])
 
 {
-    int k, r;
-    double delt;
+    int k;
     double U[4], U_old[4];
     double res_sqr;
     double temp;
@@ -571,8 +569,6 @@ void func_delta()
 
     int i, k, r;
     double delta_t;
-    double min_dist, lmin = 1.0;
-    double gmin;
     double x_i, x_k, y_k;
     double u1, u2, rho, pr, mod_u;
     double dist;
@@ -628,8 +624,6 @@ __global__ void func_delta_cuda(points &point, double cfl)
     }
 
     double delta_t;
-    double min_dist, lmin = 1.0;
-    double gmin;
     double x_i, x_k, y_k;
     double u1, u2, rho, pr, mod_u;
     double dist;

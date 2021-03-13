@@ -14,7 +14,6 @@ void flux_quad_GxI(double G[], double nx, double ny, double u1, double u2, doubl
         double A1neg, A2neg;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -64,7 +63,6 @@ void flux_quad_GxII(double G[], double nx, double ny, double u1, double u2, doub
         double A1pos, A2neg;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -117,7 +115,6 @@ void flux_quad_GxIII(double G[], double nx, double ny, double u1, double u2, dou
         double A1pos, A2pos;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -167,7 +164,6 @@ void flux_quad_GxIV(double G[], double nx, double ny, double u1, double u2, doub
         double A1neg, A2pos;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -219,7 +215,6 @@ __device__ void flux_quad_GxI_cuda(double G[], double nx, double ny, double u1, 
         double A1neg, A2neg;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -267,7 +262,6 @@ __device__ void flux_quad_GxII_cuda(double G[], double nx, double ny, double u1,
         double A1pos, A2neg;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -316,7 +310,6 @@ __device__ void flux_quad_GxIII_cuda(double G[], double nx, double ny, double u1
         double A1pos, A2pos;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;
@@ -365,7 +358,6 @@ __device__ void flux_quad_GxIV_cuda(double G[], double nx, double ny, double u1,
         double A1neg, A2pos;
         double temp1, temp2, temp3, temp4;
         double pr_by_rho, u_sqr;
-        double derf;
 
         tx = ny;
         ty = -nx;

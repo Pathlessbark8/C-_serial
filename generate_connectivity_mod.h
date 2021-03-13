@@ -222,7 +222,6 @@ void generate_connectivity()
 
 {
 
-    int i, k;
     double nx, ny;
     for (int i = 1; i <= max_points; i++)
     {

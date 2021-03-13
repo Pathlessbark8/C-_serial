@@ -9,7 +9,7 @@
 void outer_dGx_pos(double G[], int i)
 {
 
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double tx, ty, nx, ny;
     double x_i, y_i, x_k, y_k;
@@ -19,11 +19,11 @@ void outer_dGx_pos(double G[], int i)
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
     double dels_weights, deln_weights;
-    double maxi[4], mini[4];
+
 
     sum_delx_sqr = 0.0;
     sum_dely_sqr = 0.0;
@@ -98,7 +98,7 @@ void outer_dGx_pos(double G[], int i)
 
 void outer_dGx_neg(double G[], int i)
 {
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -109,10 +109,10 @@ void outer_dGx_neg(double G[], int i)
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
-    double maxi[4], mini[4];
+
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;
@@ -192,7 +192,7 @@ void outer_dGy_pos(double G[], int i)
 
 {
 
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -203,10 +203,10 @@ void outer_dGy_pos(double G[], int i)
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
-    double maxi[4], mini[4];
+
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;
@@ -288,7 +288,7 @@ void outer_dGy_pos(double G[], int i)
 __device__ void outer_dGx_pos_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
 {
 
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double tx, ty, nx, ny;
     double x_i, y_i, x_k, y_k;
@@ -298,11 +298,11 @@ __device__ void outer_dGx_pos_cuda(points &point, double G[], int i, double VL_C
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
     double dels_weights, deln_weights;
-    double maxi[4], mini[4];
+
 
     sum_delx_sqr = 0.0;
     sum_dely_sqr = 0.0;
@@ -378,7 +378,7 @@ __device__ void outer_dGx_pos_cuda(points &point, double G[], int i, double VL_C
 
 __device__ void outer_dGx_neg_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
 {
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -389,10 +389,10 @@ __device__ void outer_dGx_neg_cuda(points &point, double G[], int i, double VL_C
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
-    double maxi[4], mini[4];
+
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;
@@ -473,7 +473,7 @@ __device__ void outer_dGx_neg_cuda(points &point, double G[], int i, double VL_C
 __device__ void outer_dGy_pos_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
 
 {
-    int j, k, r;
+    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -484,10 +484,10 @@ __device__ void outer_dGy_pos_cuda(points &point, double G[], int i, double VL_C
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
-    double temp;
+
     double qtilde_i[4], qtilde_k[4];
     double phi_i[4], phi_k[4];
-    double maxi[4], mini[4];
+
     double dels_weights, deln_weights;
 
     sum_delx_sqr = 0.0;

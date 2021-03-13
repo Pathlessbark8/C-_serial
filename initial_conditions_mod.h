@@ -10,7 +10,6 @@ void restart_sol()
     double nop;
     fin.open("restart.dat");
     fin >> nop >> itr >> res_old;
-    int i = 1;
     for(int i=1;i<=max_points;i++)
     {
             fin >> nop >> nop >> nop >> nop >> nop >> point.prim[0][i] >> point.prim[1][i] >> point.prim[2][i] >> point.prim[3][i];
@@ -23,7 +22,7 @@ void restart_sol()
 void initial_conditions()
 
 {
-    int k, i;
+    int k;
     if (restart == 0)
     {
         setup_case_parameters();

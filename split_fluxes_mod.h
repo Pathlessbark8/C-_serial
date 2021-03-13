@@ -11,7 +11,6 @@ void flux_Gxp(double Gxp[], double nx, double ny, double u1, double u2, double r
     double beta, S1, B1, A1pos;
     double temp1, temp2;
     double pr_by_rho, u_sqr;
-    double derf;
 
     tx = ny;
     ty = -nx;
@@ -52,7 +51,6 @@ void flux_Gxn(double Gxn[], double nx, double ny, double u1, double u2, double r
     double beta, S1, B1, A1neg;
     double temp1, temp2;
     double pr_by_rho, u_sqr;
-    double derf;
 
     tx = ny;
     ty = -nx;
@@ -93,7 +91,6 @@ void flux_Gyp(double Gyp[], double nx, double ny, double u1, double u2, double r
     double beta, S2, B2, A2pos;
     double temp1, temp2;
     double pr_by_rho, u_sqr;
-    double derf;
 
     tx = ny;
     ty = -nx;
@@ -132,7 +129,6 @@ void flux_Gyn(double Gyn[], double nx, double ny, double u1, double u2, double r
     double beta, S2, B2, A2neg;
     double temp1, temp2;
     double pr_by_rho, u_sqr;
-    double derf;
 
     tx = ny;
     ty = -nx;
@@ -173,7 +169,6 @@ __device__ void flux_Gxp_cuda(double Gxp[], double nx, double ny, double u1, dou
     double beta, S1, B1, A1pos;
     double temp1, temp2;
     double pr_by_rho, u_sqr;
-    double derf;
 
     tx = ny;
     ty = -nx;
@@ -205,9 +200,7 @@ __device__ void flux_Gxp_cuda(double Gxp[], double nx, double ny, double u1, dou
 }
 
 __device__ void flux_Gxn_cuda(double Gxn[], double nx, double ny, double u1, double u2, double rho, double pr)
-
 {
-
     double tx, ty, ut, un;
     double beta, S1, B1, A1neg;
     double temp1, temp2;
@@ -243,9 +236,7 @@ __device__ void flux_Gxn_cuda(double Gxn[], double nx, double ny, double u1, dou
 }
 
 __device__ void flux_Gyp_cuda(double Gyp[], double nx, double ny, double u1, double u2, double rho, double pr)
-
 {
-
     double tx, ty, ut, un;
     double beta, S2, B2, A2pos;
     double temp1, temp2;

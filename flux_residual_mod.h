@@ -10,7 +10,6 @@
 void cal_flux_residual()
 
 {
-    int i, k;
     double Gxp[4], Gxn[4], Gyp[4], Gyn[4];
 
     for (int i = 1; i <= max_points; ++i)
@@ -64,7 +63,6 @@ void cal_flux_residual()
 __global__ void cal_flux_residual_cuda(points &point, int power, double VL_CONST, double gamma_new)
 
 {
-    int k;
     int bx = blockIdx.x;
     int tx = threadIdx.x;
     int i = bx * blockDim.x + tx;

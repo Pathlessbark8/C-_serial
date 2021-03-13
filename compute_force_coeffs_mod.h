@@ -7,7 +7,7 @@
 void compute_cl_cd_cm()
 {
 
-    int i, j, k;
+    int j;
     int l, m, r;
     double cp, temp;
     double lx, ly, mx, my, rx, ry;
@@ -18,7 +18,7 @@ void compute_cl_cd_cm()
     double V[shapes+1]={};
     double pitch_mom[shapes+1]={};
     double nx, ny;
-    char cp_file[] = "cp-file";
+    // char cp_file[] = "cp-file";
 
     std::fstream fout;
     fout.open("cp_file", std::ios::out);

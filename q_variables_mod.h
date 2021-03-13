@@ -9,7 +9,6 @@ using namespace std;
 void eval_q_variables()
 {
 
-    int k;
     double rho, u1, u2, pr, beta;
     double two_times_beta;
 
@@ -67,14 +66,14 @@ __global__ void eval_q_variables_cuda(points &point)
 void eval_q_derivatives()
 {
 
-    int i, k, r, nbh;
+    int nbh;
 
     double x_i, y_i, x_k, y_k;
 
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
 
-    double det, delq, temp;
+    double det;
     double one_by_det;
     fstream ff;
     ff.open("nbhs", ios::out);
@@ -143,7 +142,7 @@ void eval_q_derivatives()
 __global__ void eval_q_derivatives_cuda(points &point, int power)
 {
 
-    int k, r, nbh;
+    int  nbh;
 
     int bx = blockIdx.x;
     int tx = threadIdx.x;
@@ -158,7 +157,7 @@ __global__ void eval_q_derivatives_cuda(points &point, int power)
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
 
-    double det, delq, temp;
+    double det;
     double one_by_det;
     x_i = point.x[i];
     y_i = point.y[i];
@@ -219,12 +218,11 @@ __global__ void eval_q_derivatives_cuda(points &point, int power)
 
 void eval_q_inner_loop()
 {
-    int i;
-    int k, r, nbh;
+    int nbh;
     double x_i, y_i, x_k, y_k;
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    double det, temp;
+    double det;
     double one_by_det;
     double sum_delx_delq1, sum_delx_delq2, sum_delx_delq3, sum_delx_delq4;
     double sum_dely_delq1, sum_dely_delq2, sum_dely_delq3, sum_dely_delq4;
@@ -322,11 +320,11 @@ __global__ void eval_q_inner_loop_cuda(points &point, int power)
         return;
     }
 
-    int k, r, nbh;
+    int nbh;
     double x_i, y_i, x_k, y_k;
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    double det, temp;
+    double det;
     double one_by_det;
     double sum_delx_delq1, sum_delx_delq2, sum_delx_delq3, sum_delx_delq4;
     double sum_dely_delq1, sum_dely_delq2, sum_dely_delq3, sum_dely_delq4;
