@@ -147,5 +147,5 @@ void fpi_solver(int temp1)
         }
         // cout<<sum_res_sqr<<" "<<res_new<<" "<<res_old<<endl;
         //  Print primal output
-        cout << "iterations "<< it << " residue : " << residue << endl;//" res_new :" << res_new << " res_old :" << res_old << endl;
+        cout << "Iterations "<< it << " Residue : " << residue << "\n";//" res_new :" << res_new << " res_old :" << res_old << endl;
 }

@@ -87,7 +87,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.1;
 
-int max_iters = 1000;
+int max_iters = 50;
 
 // Unsteady variables
 double t, tfinal, dtg;
