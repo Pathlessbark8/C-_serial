@@ -1,7 +1,10 @@
 #pragma once
 #include <vector>
 #include "parameter_mod.h"
+
 #define max_points 9600
+#define pi 3.141592653589793238462643383279502884
+
 int local_points, ghost_points;
 int wall_points, interior_points, outer_points, shape_points;
 
@@ -67,6 +70,10 @@ std::vector<int> outer_points_index;
 std::vector<int> interior_points_index;
 std::vector<int> shape_points_index;
 
+//CUDA Specific
+
+int threads_per_block = 32;
+
 // iterations
 int it = 0, itr = 3;
 
@@ -103,7 +110,7 @@ int runop;
 //    power = -2.0 => weights = 1/d^2
 //    power = -4.0 => weights = 1/d^4
 
-double power = 0;
+int power = 0;
 
 //    limiter_flag = 1 => venkatakrishnan limiter
 //    limiter_flag = 2 => min-max limiter

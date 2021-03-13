@@ -9,6 +9,9 @@
 #include <iostream>
 #include <iomanip>
 #include "dump.h"
+
+#include <cub/device/device_reduce.cuh>
+
 using namespace std;
 
 void fpi_solver(int temp1)
@@ -23,28 +26,9 @@ void fpi_solver(int temp1)
                         point.prim_old[j][i] = point.prim[j][i];
                 }
         }
-        // cout<<setprecision(14)<<std::scientific;
-        // for(int r=1;r<=4;r++)
-        // {
-        //         cout<<point.prim[r][0]<<" ";
-        // }
-        // cout<<endl;
         func_delta();
-        // std::cout << "delta " << point.delta[0] << endl;
-
-        // printf("THis is temp1:%d\n", temp1);
-        //    Perform 4-stage, 3-order SSPRK update
         for (rk = 1; rk <= rks; rk++)
         {
-                // std::cout << "rk : " << rk;
-                // std::cout << "\nq" << endl;
-                // for (int i = 1; i <= 4; i++)
-                // {
-                //         std::cout << point.q[i][0] << " ";
-                // }
-                // std::cout << endl
-                //           << endl;
-
                 eval_q_variables();
 
                 eval_q_derivatives();
@@ -59,81 +43,9 @@ void fpi_solver(int temp1)
                 cal_flux_residual();
 
                 state_update(rk);
-                // cout << "flux_res" << endl;
-                // for (int r = 1; r <= 4; r++)
-                // {
-                //         cout << point.flux_res[r][0] << " ";
-                // }
-                // cout << endl;
-                // cout<<"Euler :"<<euler<<endl;
-                // cout << "\nprim" << endl;
-                // for (int i = 1; i <= 4; i++)
-                // {
-
-                //         cout << point.prim[i][0] << " ";
-                // }
-                if (rk == 1)
-                {
-                        // for(int i=1;i<=4;i++)
-                        // {
-                        //         std::cout<<point.prim[i][0]<<" ";
-                        // }
-                        // cout<<endl;
-                }
         }
 
         std::cout << setprecision(13) << scientific;
-        // dump();
-        // cout<<"rk : "<<rk<<endl;
-        // cout<<"\nq"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-        //         cout << point.q[i][0] <<  " ";
-        // }
-        // cout<<"\ndq1"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.dq[0][i][1]<<  " " ;
-        // }
-        // cout<<"\ndq2"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.dq[1][i][160] <<  " ";
-        // }
-        // cout<<"\nprim"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.prim[i][0] <<  " ";
-        // }
-        // cout<<"\nflux_res"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.flux_res[i][0] <<  " ";
-        // }
-        // cout<<"\nqm1"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.qm[0][i][0]<<  " " ;
-        // }
-        // cout<<"\nqm2"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.qm[1][i][0] <<  " ";
-        // }
-        // cout<<"\nprim"<<endl;
-        // for (int i = 1; i <= 4; i++)
-        // {
-
-        //         cout << point.prim[i][0] <<  " ";
-        // }
-        // cout<<endl;
-        // objective_function();
 
         res_new = sqrt(sum_res_sqr) / max_points;
         if (temp1 <= 2 && restart == 0)
@@ -145,7 +57,65 @@ void fpi_solver(int temp1)
         {
                 residue = log10(res_new / res_old);
         }
-        // cout<<sum_res_sqr<<" "<<res_new<<" "<<res_old<<endl;
-        //  Print primal output
-        cout << "Iterations "<< it << " Residue : " << residue << "\n";//" res_new :" << res_new << " res_old :" << res_old << endl;
+
+        cout << "Iterations "<< it << " Residue : " << residue << "\n";
+}
+
+void fpi_solver_cuda(points* point_d)
+
+{
+    if (restart == 0)
+    {
+        itr = 0;
+    }
+
+    dim3 threads(threads_per_block, 1, 1);
+    dim3 grid(ceil(max_points + 1 / threads.x), 1, 1);
+
+    double *sum_res_sqr_d;
+    double sum_res_sqr_h[max_points + 1] = {0};
+    double *sum_res_sqr_result_d;
+
+    size_t temp_storage_bytes;
+    int* temp_storage=NULL;
+
+    cudaMalloc(&sum_res_sqr_d, sizeof(double) * (max_points + 1));
+    cudaMemcpy(sum_res_sqr_d, &sum_res_sqr_h, sizeof(sum_res_sqr_h), cudaMemcpyHostToDevice);
+    cudaMalloc(&sum_res_sqr_result_d, sizeof(double));
+
+    cub::DeviceReduce::Sum(temp_storage, temp_storage_bytes, sum_res_sqr_d, sum_res_sqr_result_d, max_points);
+
+    for (it = itr + 1; it <= itr + max_iters; it++)
+    {
+        func_delta_cuda<<<grid, threads>>>(*point_d, CFL);
+        for (int rk = 1; rk <= rks; rk++){
+            eval_q_variables_cuda<<<grid, threads>>>(*point_d);
+            eval_q_derivatives_cuda<<<grid, threads>>>(*point_d, power);
+            for (int i = 1; i <= inner_iterations; i++)
+            {
+                eval_q_inner_loop_cuda<<<grid, threads>>>(*point_d, power);
+                eval_update_innerloop_cuda<<<grid, threads>>>(*point_d);
+            }
+            cal_flux_residual_cuda<<<grid, threads>>>(*point_d, power, VL_CONST, gamma_new);
+            state_update_cuda<<<grid, threads>>>(*point_d, rk, euler, mach, theta, sum_res_sqr_d);
+        }
+        cub::DeviceReduce::Sum(temp_storage, temp_storage_bytes, sum_res_sqr_d, sum_res_sqr_result_d, max_points);
+        cudaMemcpy(&sum_res_sqr, sum_res_sqr_result_d, sizeof(double), cudaMemcpyDeviceToHost);
+
+        cout << sum_res_sqr << endl;
+
+        // res_new = sqrt(sum_res_sqr) / max_points;
+        // if (it <= 2 && restart == 0)
+        // {
+        //     res_old = res_new;
+        //     residue = 0;
+        // }
+        // else
+        // {
+        //     residue = log10(res_new / res_old);
+        // }
+
+        cout << "Iterations "<< it << " Residue : " << residue << "\n";
+    }
+
 }

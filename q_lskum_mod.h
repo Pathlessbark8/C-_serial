@@ -21,10 +21,17 @@
 void q_lskum()
 
 {
-
-
-
         int i;
+
+        for (i = 1; i <= local_points; i++)
+        {
+            point.U_old[0][i] = point.prim[0][i];
+            point.U_old[1][i] = point.prim[0][i] * point.prim[1][i];
+            point.U_old[2][i] = point.prim[0][i] * point.prim[2][i];
+            point.U_old[3][i] = 2.5 * point.prim[3][i] + 0.5 * point.prim[0][i] * (point.prim[1][i] * point.prim[1][i] + point.prim[2][i] * point.prim[2][i]);
+        }
+
+        //Set U_old to U for first iteration
 
         points *point_d;
         int point_size = sizeof(point);
@@ -33,31 +40,10 @@ void q_lskum()
         cudaMalloc(&point_d, point_size);
         cudaMemcpy(point_d, &point, point_size, cudaMemcpyHostToDevice);
 
-        // test<<<1,1>>>(point_d);
+        fpi_solver_cuda(point_d);
 
         cudaMemcpy(&point, point_d, point_size, cudaMemcpyDeviceToHost);
         cudaFree(point_d);
 
-
-        
-
-        // //Set U_old to U for first iteration
-        // for (i = 1; i <= local_points; i++)
-        // {
-        //         point.U_old[0][i] = point.prim[0][i];
-        //         point.U_old[1][i] = point.prim[0][i] * point.prim[1][i];
-        //         point.U_old[2][i] = point.prim[0][i] * point.prim[2][i];
-        //         point.U_old[3][i] = 2.5 * point.prim[3][i] + 0.5 * point.prim[0][i] * (point.prim[1][i] * point.prim[1][i] + point.prim[2][i] * point.prim[2][i]);
-        // }
-
-        // t = 0.0;
-        // if (restart == 0)
-        // {
-        //         itr = 0;
-        // }
-        // for (it = itr + 1; it <= itr + max_iters; it++)
-        // {
-        //         fpi_solver(it);
-        //         t = t + dtg;
-        // }
+        // cout << point.prim[0][1] << endl;
 }
