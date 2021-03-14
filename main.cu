@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-
+    cout << "Reading Grid\n";
     fstream fin;
     fin.open("partGrid", ios::in);
     fin >> local_points;
@@ -24,10 +24,15 @@ int main()
             fin >> point.conn[i][r];
         }
     }
+    cout << "Loaded " << local_points << " points\n";
+    cout << "Allocating Memory\n";
     allocate_soln();
     local_points = max_points;
+    cout << "Computing Normals\n";
     compute_normals();
+    cout << "Generating Connectivity\n";
     generate_connectivity();
+    cout << "Setting Initial Conditions\n";
     initial_conditions();
     q_lskum();
 }

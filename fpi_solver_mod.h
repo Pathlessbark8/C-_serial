@@ -79,7 +79,7 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
     double *sum_res_sqr_d = NULL;
     // double *sum_res_sqr_h = new double[max_points];
     
-    cudaMalloc(&sum_res_sqr_d, sizeof(double) * max_points);
+    cudaMalloc(&sum_res_sqr_d, sizeof(double) * (max_points + 1));
     cudaDeviceSynchronize();
     
     for (it = itr + 1; it <= itr + max_iters; it++)
@@ -115,4 +115,5 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
         // outfile.open("residue", std::ios_base::app);
         // outfile << it << " " << setprecision(16) << residue << "\n";
     }
+    cudaFree(sum_res_sqr_d);
 }

@@ -23,6 +23,8 @@ void q_lskum()
         point.U_old[2][i] = point.prim[0][i] * point.prim[2][i];
         point.U_old[3][i] = 2.5 * point.prim[3][i] + 0.5 * point.prim[0][i] * (point.prim[1][i] * point.prim[1][i] + point.prim[2][i] * point.prim[2][i]);
     }
+    
+    cout << "Pushing to GPU\n";
 
     //Set U_old to U for first iteration
 
@@ -36,6 +38,7 @@ void q_lskum()
 
     cudaDeviceSynchronize();
     auto start = high_resolution_clock::now();
+    cout << "Starting CUDA execution\n";
     fpi_solver_cuda(point_d, stream);
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
@@ -43,4 +46,5 @@ void q_lskum()
 
     cudaMemcpy(&point, point_d, point_size, cudaMemcpyDeviceToHost);
     cudaFree(point_d);
+    cout << "Done\n";
 }
