@@ -72,7 +72,7 @@ std::vector<int> shape_points_index;
 
 //CUDA Specific
 
-int threads_per_block = 32;
+int threads_per_block = 128;
 
 // iterations
 int it = 0, itr = 3;
@@ -94,7 +94,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.00001;
 
-int max_iters = 1000;
+int max_iters = 3;
 
 // Unsteady variables
 double t, tfinal, dtg;
