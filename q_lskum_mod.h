@@ -24,7 +24,7 @@ void q_lskum()
         //Set U_old to U for first iteration
 
         points *point_d;
-        unsigned int point_size = sizeof(point);
+        unsigned long point_size = sizeof(point);
         cudaStream_t stream;
         cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
 
