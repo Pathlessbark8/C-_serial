@@ -111,8 +111,8 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
         }
 
         cout << "Iterations "<< it << " Residue : " << setprecision(16) << residue << "\n";
-        ofstream outfile;
-        outfile.open("residue", std::ios_base::app);
-        outfile << it << " " << setprecision(16) << residue << "\n";
+        // ofstream outfile;
+        // outfile.open("residue", std::ios_base::app);
+        // outfile << it << " " << setprecision(16) << residue << "\n";
     }
 }

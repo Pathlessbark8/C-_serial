@@ -2,7 +2,7 @@
 #include <vector>
 #include "parameter_mod.h"
 
-#define max_points 10000000
+#define max_points 2500000
 #define pi 3.141592653589793238462643383279502884
 
 int local_points, ghost_points;
