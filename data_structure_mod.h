@@ -2,7 +2,7 @@
 #include <vector>
 #include "parameter_mod.h"
 
-#define max_points 2500000
+#define max_points 625000
 #define pi 3.141592653589793238462643383279502884
 
 int local_points, ghost_points;
@@ -22,7 +22,7 @@ struct points
   // std::vector<int> qtdepth;
   double nx[max_points + 1], ny[max_points + 1];
   int nbhs[max_points + 1];
-  int conn[max_points + 1][20]; //2-D array
+  int conn[max_points + 1][10]; //2-D array
 
   double min_dist[max_points + 1];
 
@@ -54,8 +54,8 @@ struct points
   double entropy[max_points], vorticity[max_points], vorticity_sqr[max_points];
   int xpos_nbhs[max_points], xneg_nbhs[max_points], ypos_nbhs[max_points], yneg_nbhs[max_points];
 
-  int xpos_conn[max_points][20], xneg_conn[max_points][20];
-  int ypos_conn[max_points][20], yneg_conn[max_points][20];
+  int xpos_conn[max_points][10], xneg_conn[max_points][10];
+  int ypos_conn[max_points][10], yneg_conn[max_points][10];
 
   // std::vector<double> delta;
   double delta[max_points];
@@ -94,7 +94,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.00001;
 
-int max_iters = 3;
+int max_iters = 100;
 
 // Unsteady variables
 double t, tfinal, dtg;

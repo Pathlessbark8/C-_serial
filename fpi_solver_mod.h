@@ -93,7 +93,18 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
                 eval_q_inner_loop_cuda<<<grid, threads>>>(*point_d, power);
                 eval_update_innerloop_cuda<<<grid, threads>>>(*point_d);
             }
-            cal_flux_residual_cuda<<<grid, threads>>>(*point_d, power, VL_CONST, gamma_new);
+            wall_dGx_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            wall_dGx_neg_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            wall_dGy_neg_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+
+            interior_dGx_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            interior_dGx_neg_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            interior_dGy_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            interior_dGy_neg_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            
+            outer_dGx_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            outer_dGx_neg_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
+            outer_dGy_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
             state_update_cuda<<<grid, threads>>>(*point_d, rk, euler, mach, theta, sum_res_sqr_d);
             cudaDeviceSynchronize();
             sum_res_sqr = thrust::reduce(thrust::cuda::par.on(stream), sum_res_sqr_d, sum_res_sqr_d + max_points, 0.0);

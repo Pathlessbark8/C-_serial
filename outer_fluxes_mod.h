@@ -285,8 +285,17 @@ void outer_dGy_pos(double G[], int i)
 
 // CUDA KERNELS
 
-__device__ void outer_dGx_pos_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void outer_dGx_pos_cuda(points &point, double VL_CONST, double gamma_new, int power)
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 2){
+        return;
+    }
 
     int j, k;
     double rho, u1, u2, pr;
@@ -370,14 +379,27 @@ __device__ void outer_dGx_pos_cuda(points &point, double G[], int i, double VL_C
 
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
+
+    double delta = point.delta[i];
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] = delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
 
-__device__ void outer_dGx_neg_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void outer_dGx_neg_cuda(points &point, double VL_CONST, double gamma_new, int power)
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 2){
+        return;
+    }
+    
     int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
@@ -464,15 +486,27 @@ __device__ void outer_dGx_neg_cuda(points &point, double G[], int i, double VL_C
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
 
+    double delta = point.delta[i];
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
 
-__device__ void outer_dGy_pos_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void outer_dGy_pos_cuda(points &point, double VL_CONST, double gamma_new, int power)
 
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 2){
+        return;
+    }
+    
     int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
@@ -560,8 +594,10 @@ __device__ void outer_dGy_pos_cuda(points &point, double G[], int i, double VL_C
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
 
+    double delta = point.delta[i];
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely) * one_by_det;
     }
 }

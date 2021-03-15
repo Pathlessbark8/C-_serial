@@ -286,16 +286,26 @@ void wall_dGy_neg(double G[], int i)
 
 // CUDA KERNELS
 
-__device__ void wall_dGx_pos_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_new, int power)
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 0){
+        return;
+    }
 
     int j, k;
     double rho, u1, u2, pr;
-    double tx, ty, nx, ny;
     double x_i, y_i, x_k, y_k;
+    double tx, ty, nx, ny;
     double G_i[4], G_k[4];
     double delx, dely, det, one_by_det;
     double dels, deln;
+
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
     double sum_delx_delf[4]={}, sum_dely_delf[4]={};
     double dist, weights;
@@ -371,15 +381,27 @@ __device__ void wall_dGx_pos_cuda(points &point, double G[], int i, double VL_CO
 
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
+
+    double delta = (2.0 * point.delta[i]);
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] = delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
 
-
-__device__ void wall_dGx_neg_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_new, int power)
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 0){
+        return;
+    }
+
     int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
@@ -466,14 +488,26 @@ __device__ void wall_dGx_neg_cuda(points &point, double G[], int i, double VL_CO
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
 
+    double delta = (2.0 * point.delta[i]);
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
 
-__device__ void wall_dGy_neg_cuda(points &point, double G[], int i, double VL_CONST, double gamma_new, int power)
+__global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_new, int power)
 {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < 1 || i > max_points){
+        return;
+    }
+
+    if (point.flag_1[i] != 0){
+        return;
+    }
+
     int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
@@ -560,8 +594,10 @@ __device__ void wall_dGy_neg_cuda(points &point, double G[], int i, double VL_CO
     det = sum_delx_sqr * sum_dely_sqr - sum_delx_dely * sum_delx_dely;
     one_by_det = 1.0 / det;
 
+    double delta = (2.0 * point.delta[i]);
+
     for (int j = 0; j < 4; j++)
     {
-        G[j] = (sum_dely_delf[j]*sum_delx_sqr - sum_delx_delf[j]*sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_dely_delf[j] * sum_delx_sqr - sum_delx_delf[j] * sum_delx_dely) * one_by_det;
     }
 }
