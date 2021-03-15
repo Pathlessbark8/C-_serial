@@ -42,7 +42,7 @@ void q_lskum()
     fpi_solver_cuda(point_d, stream);
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << "Time Taken :" << duration.count()/1000000 << endl;
+    cout << "Time Taken :" << duration.count()/1000000.0 << endl;
 
     cudaMemcpy(&point, point_d, point_size, cudaMemcpyDeviceToHost);
     cudaFree(point_d);
