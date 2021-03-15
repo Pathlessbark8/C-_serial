@@ -13,53 +13,31 @@ int *pghost;
 
 struct points
 {
-
-  std::vector<int> original_id;
   double x[max_points + 1], y[max_points + 1];
   int left[max_points + 1], right[max_points + 1];
   int flag_1[max_points + 1]; // stores location of point
   int flag_2[max_points + 1]; //stores shape point belongs to
-  // std::vector<int> qtdepth;
   double nx[max_points + 1], ny[max_points + 1];
   int nbhs[max_points + 1];
-  int conn[max_points + 1][10]; //2-D array
+  int conn[max_points + 1][15]; //2-D array
 
   double min_dist[max_points + 1];
 
-  //2-D array
-  // std::vector<std::vector<double>> prim;
-  // std::vector<std::vector<double>> prim_old;
-  // std::vector<std::vector<double>> flux_res;
-  // std::vector<std::vector<double>> q;
-  // std::vector<std::vector<double>> U;
   double prim[4][max_points + 1];
   double prim_old[4][max_points + 1];
   double flux_res[4][max_points + 1];
   double q[4][max_points + 1];
   double U[4][max_points + 1];
-  //3-D array
-  // std::vector<std::vector<std::vector<double>>> dq;
-  // std::vector<std::vector<std::vector<double>>> qm;
-  // std::vector<std::vector<std::vector<double>>> temp;
-
-  // std::vector<double> entropy, vorticity, vorticity_sqr;
-  // std::vector<int> xpos_nbhs, xneg_nbhs, ypos_nbhs, yneg_nbhs;
-
-  // std::vector<std::vector<int>> xpos_conn, xneg_conn;
-  // std::vector<std::vector<int>> ypos_conn, yneg_conn;
   double dq[2][4][max_points];
   double qm[2][4][max_points];
   double temp[3][4][max_points];
 
-  double entropy[max_points], vorticity[max_points], vorticity_sqr[max_points];
   int xpos_nbhs[max_points], xneg_nbhs[max_points], ypos_nbhs[max_points], yneg_nbhs[max_points];
 
-  int xpos_conn[max_points][10], xneg_conn[max_points][10];
-  int ypos_conn[max_points][10], yneg_conn[max_points][10];
+  int xpos_conn[max_points][15], xneg_conn[max_points][15];
+  int ypos_conn[max_points][15], yneg_conn[max_points][15];
 
-  // std::vector<double> delta;
   double delta[max_points];
-  //  Implicit data
   double U_old[4][max_points + 1];
 };
 
