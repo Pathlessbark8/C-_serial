@@ -312,6 +312,7 @@ void eval_q_inner_loop()
 
 __global__ void eval_q_inner_loop_cuda(points &point, int power)
 {
+    int nbh;
     int bx = blockIdx.x;
     int tx = threadIdx.x;
     int i = bx * blockDim.x + tx;
@@ -320,7 +321,6 @@ __global__ void eval_q_inner_loop_cuda(points &point, int power)
         return;
     }
 
-    int nbh;
     double x_i, y_i, x_k, y_k;
     double delx, dely, dist, weights;
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
