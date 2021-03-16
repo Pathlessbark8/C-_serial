@@ -4,6 +4,7 @@
 
 #define max_points 625000
 #define pi 3.141592653589793238462643383279502884
+#define threads_per_block 128
 
 int local_points, ghost_points;
 int wall_points, interior_points, outer_points, shape_points;
@@ -48,10 +49,6 @@ std::vector<int> outer_points_index;
 std::vector<int> interior_points_index;
 std::vector<int> shape_points_index;
 
-//CUDA Specific
-
-int threads_per_block = 128;
-
 // iterations
 int it = 0, itr = 3;
 
@@ -72,7 +69,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.00001;
 
-int max_iters = 1000;
+int max_iters = 100;
 
 // Unsteady variables
 double t, tfinal, dtg;

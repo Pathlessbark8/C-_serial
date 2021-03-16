@@ -298,7 +298,6 @@ __global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_n
         return;
     }
 
-    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -307,7 +306,7 @@ __global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_n
     double dels, deln;
 
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
+    __shared__ double sum_delx_delf[threads_per_block * 4], sum_dely_delf[threads_per_block * 4];
     double dist, weights;
 
     double qtilde_i[4], qtilde_k[4];
@@ -328,9 +327,14 @@ __global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_n
     tx = ny;
     ty = -nx;
 
-    for (j = 1; j <= point.xpos_nbhs[i]; j++)
+    for (int j = 0; j < 4; ++j){
+        sum_delx_delf[threadIdx.x + blockDim.x * j] = 0;
+        sum_dely_delf[threadIdx.x + blockDim.x * j] = 0;
+    }
+
+    for (int j = 1; j <= point.xpos_nbhs[i]; j++)
     {
-        k = point.xpos_conn[i][j];
+        int k = point.xpos_conn[i][j];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -374,8 +378,8 @@ __global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_n
         flux_quad_GxII_cuda(G_k, nx, ny, u1, u2, rho, pr);
         for (int r = 0; r < 4; r++)
         {
-            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
-            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
+            sum_delx_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -386,7 +390,7 @@ __global__ void wall_dGx_pos_cuda(points &point, double VL_CONST, double gamma_n
 
     for (int j = 0; j < 4; j++)
     {
-        point.flux_res[j][i] = delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] = delta * (sum_delx_delf[threadIdx.x + blockDim.x * j] * sum_dely_sqr - sum_dely_delf[threadIdx.x + blockDim.x * j] * sum_delx_dely) * one_by_det;
     }
 }
 
@@ -402,7 +406,6 @@ __global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_n
         return;
     }
 
-    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -411,7 +414,7 @@ __global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_n
     double dels, deln;
 
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
+    __shared__ double sum_delx_delf[threads_per_block * 4], sum_dely_delf[threads_per_block * 4];
     double dist, weights;
 
     double qtilde_i[4], qtilde_k[4];
@@ -432,10 +435,15 @@ __global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_n
     tx = ny;
     ty = -nx;
 
-    for (j = 1; j <= point.xneg_nbhs[i]; j++)
+    for (int j = 0; j < 4; ++j){
+        sum_delx_delf[threadIdx.x + blockDim.x * j] = 0;
+        sum_dely_delf[threadIdx.x + blockDim.x * j] = 0;
+    }
+
+    for (int j = 1; j <= point.xneg_nbhs[i]; j++)
 
     {
-        k = point.xneg_conn[i][j];
+        int k = point.xneg_conn[i][j];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -480,8 +488,8 @@ __global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_n
 
         for (int r = 0; r < 4; r++)
         {
-            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
-            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
+            sum_delx_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -492,7 +500,7 @@ __global__ void wall_dGx_neg_cuda(points &point, double VL_CONST, double gamma_n
 
     for (int j = 0; j < 4; j++)
     {
-        point.flux_res[j][i] += delta * (sum_delx_delf[j] * sum_dely_sqr - sum_dely_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_delx_delf[threadIdx.x + blockDim.x * j] * sum_dely_sqr - sum_dely_delf[threadIdx.x + blockDim.x * j] * sum_delx_dely) * one_by_det;
     }
 }
 
@@ -508,7 +516,6 @@ __global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_n
         return;
     }
 
-    int j, k;
     double rho, u1, u2, pr;
     double x_i, y_i, x_k, y_k;
     double tx, ty, nx, ny;
@@ -517,7 +524,7 @@ __global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_n
     double dels, deln;
 
     double sum_delx_sqr, sum_dely_sqr, sum_delx_dely;
-    double sum_delx_delf[4]={}, sum_dely_delf[4]={};
+    __shared__ double sum_delx_delf[threads_per_block * 4], sum_dely_delf[threads_per_block * 4];
     double dist, weights;
 
     double qtilde_i[4], qtilde_k[4];
@@ -538,10 +545,15 @@ __global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_n
     tx = ny;
     ty = -nx;
 
-    for (j = 1; j <= point.yneg_nbhs[i]; j++)
+    for (int j = 0; j < 4; ++j){
+        sum_delx_delf[threadIdx.x + blockDim.x * j] = 0;
+        sum_dely_delf[threadIdx.x + blockDim.x * j] = 0;
+    }
+
+    for (int j = 1; j <= point.yneg_nbhs[i]; j++)
 
     {
-        k = point.yneg_conn[i][j];
+        int k = point.yneg_conn[i][j];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -586,8 +598,8 @@ __global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_n
 
         for (int r = 0; r < 4; r++)
         {
-            sum_delx_delf[r] = sum_delx_delf[r] + (G_k[r] - G_i[r]) * dels_weights;
-            sum_dely_delf[r] = sum_dely_delf[r] + (G_k[r] - G_i[r]) * deln_weights;
+            sum_delx_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * dels_weights;
+            sum_dely_delf[threadIdx.x + blockDim.x * r] += (G_k[r] - G_i[r]) * deln_weights;
         }
     }
 
@@ -598,6 +610,6 @@ __global__ void wall_dGy_neg_cuda(points &point, double VL_CONST, double gamma_n
 
     for (int j = 0; j < 4; j++)
     {
-        point.flux_res[j][i] += delta * (sum_dely_delf[j] * sum_delx_sqr - sum_delx_delf[j] * sum_delx_dely) * one_by_det;
+        point.flux_res[j][i] += delta * (sum_dely_delf[threadIdx.x + blockDim.x * j] * sum_delx_sqr - sum_delx_delf[threadIdx.x + blockDim.x * j] * sum_delx_dely) * one_by_det;
     }
 }
