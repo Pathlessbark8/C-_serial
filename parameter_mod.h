@@ -8,7 +8,6 @@ double theta;
 const double rho_inf = 1.0;
 const double pr_inf = 1.0/1.4;
 const double gamma_new = 1.4;
-const double pi=4*atan(1.0);
 double q_init[4], q_inf[4];
 
 void setup_case_parameters()

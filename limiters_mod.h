@@ -3,84 +3,32 @@
 #include "data_structure_mod.h"
 #include <vector>
 
-// The following two subroutines are used for min-max limiter ..
-
-void max_q_value(int i, double maxi[])
-{
-    int j, k;
-
-    for (int j = 0; j < 4; j++)
-    {
-        maxi[j] = point.q[j][i];
-    }
-
-    for (j = 1; j <= point.nbhs[i]; j++)
-    {
-        k = point.conn[i][j];
-        for (int r = 0; r < 4; r++)
-        {
-            if (maxi[r] < point.q[r][k])
-            {
-                maxi[r] = point.q[r][k];
-            }
-        }
-    }
-}
-
-void min_q_value(int i, double mini[])
+__device__ void venkat_limiter_cuda(points &point, double other_shared[], double qtilde_shared[], int k, double VL_CONST, double gamma_new, double delx, double dely)
 {
 
-    int j, k;
-
-    for (int j = 0; j <4; j++)
-    {
-        mini[j] = point.q[j][i];
+    double  del_neg, del_pos;
+    double epsi = VL_CONST * point.min_dist[k], num, den, temp;
+    epsi = pow(epsi, 3);
+    double q[4];
+    for (int r = 0; r < 4; r++){
+        q[r] = point.q[r][k];
+        qtilde_shared[threadIdx.x + blockDim.x * r] = 1;  
     }
-
-    for (j = 1; j <= point.nbhs[i]; j++)
+ 
+    for (int r = 0; r < 4; r++)
     {
-        k = point.conn[i][j];
-        for (int r = 0; r < 4; r++)
-        {
-            if (mini[r] > point.q[r][k])
-            {
-                mini[r] = point.q[r][k];
-            }
-        }
-    }
-}
-
-// The following subroutines are used for venkatakrishnan limiter ..
-
-void venkat_limiter(double qtilde[], double phi[], int k)
-{
-
-    int r;
-    double q, del_neg, del_pos;
-    double epsi, num, den, temp;
-
-    for (r = 0; r < 4; r++)
-    {
-        q = point.q[r][k];
-        del_neg = qtilde[r] - q;
-        if (abs(del_neg) <= 10e-6)
-        {
-            phi[r] = 1.0;
-        }
-        else if (abs(del_neg) > 10e-6)
+        del_neg = point.q[r][k] - (0.5 * (delx * point.dq[0][r][k] + dely * point.dq[1][r][k] - q[r]));
+        if (abs(del_neg) > 1e-5)
         {
             if (del_neg > 0)
             {
-                del_pos = point.qm[0][r][k] - q;
+                del_pos = point.qm[0][r][k] - q[r];
             }
 
             else if (del_neg < 0)
             {
-                del_pos = point.qm[1][r][k] - q;
+                del_pos = point.qm[1][r][k] - q[r];
             }
-
-            epsi = VL_CONST * point.min_dist[k];
-            epsi = pow(epsi, 3);
 
             num = (del_pos * del_pos) + (epsi * epsi); // Numerator ..
             num = num * del_neg + 2.0 * del_neg * del_neg * del_pos;
@@ -93,63 +41,28 @@ void venkat_limiter(double qtilde[], double phi[], int k)
 
             if (temp < 1)
             {
-                phi[r] = temp;
-            }
-            else
-            {
-                phi[r] = 1;
+                qtilde_shared[threadIdx.x + blockDim.x * r] = temp;
             }
         }
     }
-}
-
-__device__ void venkat_limiter_cuda(points &point, double qtilde[], double phi[], int k, double VL_CONST)
-{
-
-    int r;
-    double q, del_neg, del_pos;
-    double epsi, num, den, temp;
-
-    for (r = 0; r < 4; r++)
-    {
-        q = point.q[r][k];
-        del_neg = qtilde[r] - q;
-        if (abs(del_neg) <= 10e-6)
-        {
-            phi[r] = 1.0;
-        }
-        else if (abs(del_neg) > 10e-6)
-        {
-            if (del_neg > 0)
-            {
-                del_pos = point.qm[0][r][k] - q;
-            }
-
-            else if (del_neg < 0)
-            {
-                del_pos = point.qm[1][r][k] - q;
-            }
-
-            epsi = VL_CONST * point.min_dist[k];
-            epsi = pow(epsi, 3);
-
-            num = (del_pos * del_pos) + (epsi * epsi); // Numerator ..
-            num = num * del_neg + 2.0 * del_neg * del_neg * del_pos;
-
-            den = del_pos * del_pos + 2.0 * del_neg * del_neg; // Denominator ..
-            den = den + del_neg * del_pos + epsi * epsi;
-            den = den * del_neg;
-
-            temp = num / den;
-
-            if (temp < 1)
-            {
-                phi[r] = temp;
-            }
-            else
-            {
-                phi[r] = 1;
-            }
-        }
+    for (int r = 0; r < 4; ++r){
+        qtilde_shared[threadIdx.x + blockDim.x * r] = point.q[r][k] - 0.5 * (qtilde_shared[threadIdx.x + blockDim.x * r] * (delx * point.dq[0][r][k] + dely * point.dq[1][r][k]));
     }
+
+    double beta = - qtilde_shared[threadIdx.x + blockDim.x * 3] * 0.5;
+
+    temp = 0.5 / beta;
+
+    double u1 = qtilde_shared[threadIdx.x + blockDim.x * 1] * temp;
+    double u2 = qtilde_shared[threadIdx.x + blockDim.x * 2] * temp;
+
+    double temp1 = qtilde_shared[threadIdx.x + blockDim.x * 0] + beta * ( u1 * u1 + u2 * u2 );
+    double temp2 = temp1 - (log(beta)/(gamma_new-1));
+    double rho = exp(temp2);
+    double pr = rho * temp;
+
+    other_shared[threadIdx.x + blockDim.x * 4] = u1;
+    other_shared[threadIdx.x + blockDim.x * 5] = u2;
+    other_shared[threadIdx.x + blockDim.x * 6] = rho;
+    other_shared[threadIdx.x + blockDim.x * 7] = pr;
 }
