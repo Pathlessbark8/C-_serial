@@ -74,7 +74,7 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
     remove("residue");
 
     dim3 threads(threads_per_block, 1, 1);
-    dim3 grid(ceil((max_points/ threads.x)+ 1), 1, 1);
+    dim3 grid(ceil((max_points/ threads.x) + 1), 1, 1);
 
     double *sum_res_sqr_d = NULL;
     // double *sum_res_sqr_h = new double[max_points];

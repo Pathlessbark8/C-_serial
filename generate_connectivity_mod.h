@@ -2,6 +2,16 @@
 
 #include "data_structure_mod.h"
 
+int return_index(int pt_to_search, int host_index){
+    unsigned int n = sizeof(point.conn[0])/sizeof(point.conn[0][0]);
+    for (int i = 1; i < n; i++){
+        if (point.conn[host_index][i] == pt_to_search){
+            return i;
+        }
+    }
+    exit(2);
+}
+
 void get_interior_neighbours(int i, double nx, double ny)
 
 {
@@ -40,7 +50,7 @@ void get_interior_neighbours(int i, double nx, double ny)
             point.xpos_nbhs[i] = point.xpos_nbhs[i] + 1;
 
             count = point.xpos_nbhs[i];
-            point.xpos_conn[i][count] = nbh;
+            point.xpos_conn[i][count] = return_index(nbh, i);
         }
 
         if (dels >= 0.0)
@@ -49,7 +59,7 @@ void get_interior_neighbours(int i, double nx, double ny)
             point.xneg_nbhs[i] = point.xneg_nbhs[i] + 1;
 
             count = point.xneg_nbhs[i];
-            point.xneg_conn[i][count] = nbh;
+            point.xneg_conn[i][count] = return_index(nbh, i);
         }
 
         if (deln <= 0.0)
@@ -58,7 +68,7 @@ void get_interior_neighbours(int i, double nx, double ny)
             point.ypos_nbhs[i] = point.ypos_nbhs[i] + 1;
 
             count = point.ypos_nbhs[i];
-            point.ypos_conn[i][count] = nbh;
+            point.ypos_conn[i][count] = return_index(nbh, i);
         }
 
         if (deln >= 0.0)
@@ -67,7 +77,7 @@ void get_interior_neighbours(int i, double nx, double ny)
             point.yneg_nbhs[i] = point.yneg_nbhs[i] + 1;
 
             count = point.yneg_nbhs[i];
-            point.yneg_conn[i][count] = nbh;
+            point.yneg_conn[i][count] = return_index(nbh, i);
         }
     }
 
@@ -125,7 +135,7 @@ void get_wall_boundary_neighbours(int i, double nx, double ny)
             point.xpos_nbhs[i] = point.xpos_nbhs[i] + 1;
 
             count = point.xpos_nbhs[i];
-            point.xpos_conn[i][count] = nbh;
+            point.xpos_conn[i][count] = return_index(nbh, i);
         }
 
         if (dels >= 0.0)
@@ -134,13 +144,13 @@ void get_wall_boundary_neighbours(int i, double nx, double ny)
             point.xneg_nbhs[i] = point.xneg_nbhs[i] + 1;
 
             count = point.xneg_nbhs[i];
-            point.xneg_conn[i][count] = nbh;
+            point.xneg_conn[i][count] = return_index(nbh, i);
         }
 
         point.yneg_nbhs[i] = point.yneg_nbhs[i] + 1;
 
         count = point.yneg_nbhs[i];
-        point.yneg_conn[i][count] = nbh;
+        point.yneg_conn[i][count] = return_index(nbh, i);
     }
 
     // if(point.xpos_nbhs[i] == 0)
@@ -191,7 +201,7 @@ void get_outer_boundary_neighbours(int i, double nx, double ny)
             point.xpos_nbhs[i] = point.xpos_nbhs[i] + 1;
 
             count = point.xpos_nbhs[i];
-            point.xpos_conn[i][count] = nbh;
+            point.xpos_conn[i][count] = return_index(nbh, i);
         }
 
         if (dels >= 0.0)
@@ -200,13 +210,13 @@ void get_outer_boundary_neighbours(int i, double nx, double ny)
             point.xneg_nbhs[i] = point.xneg_nbhs[i] + 1;
 
             count = point.xneg_nbhs[i];
-            point.xneg_conn[i][count] = nbh;
+            point.xneg_conn[i][count] = return_index(nbh, i);
         }
 
         point.ypos_nbhs[i] = point.ypos_nbhs[i] + 1;
 
         count = point.ypos_nbhs[i];
-        point.ypos_conn[i][count] = nbh;
+        point.ypos_conn[i][count] = return_index(nbh, i);
     }
 
     // if(point.xpos_nbhs[i] == 0)

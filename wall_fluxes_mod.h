@@ -321,6 +321,7 @@ __device__ void wall_dGx_pos_cuda(points &point, double G[], int i, double VL_CO
     for (j = 1; j <= point.xpos_nbhs[i]; j++)
     {
         k = point.xpos_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -414,6 +415,7 @@ __device__ void wall_dGx_neg_cuda(points &point, double G[], int i, double VL_CO
 
     {
         k = point.xneg_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -508,6 +510,7 @@ __device__ void wall_dGy_neg_cuda(points &point, double G[], int i, double VL_CO
 
     {
         k = point.yneg_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];
