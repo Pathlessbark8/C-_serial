@@ -19,7 +19,7 @@ struct points
   int flag_2[max_points + 1]; //stores shape point belongs to
   double nx[max_points + 1], ny[max_points + 1];
   int nbhs[max_points + 1];
-  int conn[max_points + 1][20]; //2-D array
+  int conn[max_points + 1][8]; //2-D array
 
   double min_dist[max_points + 1];
 
