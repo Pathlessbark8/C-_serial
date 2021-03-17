@@ -329,6 +329,7 @@ __global__ void outer_dGx_pos_cuda(points &point, double VL_CONST, double gamma_
     for (j = 1; j <= point.xpos_nbhs[i]; j++)
     {
         k = point.xpos_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -434,6 +435,7 @@ __global__ void outer_dGx_neg_cuda(points &point, double VL_CONST, double gamma_
 
     {
         k = point.xneg_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];
@@ -541,6 +543,7 @@ __global__ void outer_dGy_pos_cuda(points &point, double VL_CONST, double gamma_
 
     {
         k = point.ypos_conn[i][j];
+        k = point.conn[i][k];
 
         x_k = point.x[k];
         y_k = point.y[k];

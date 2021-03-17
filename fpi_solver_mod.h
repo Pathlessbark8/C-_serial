@@ -107,7 +107,7 @@ void fpi_solver_cuda(points* point_d, cudaStream_t stream)
             outer_dGy_pos_cuda<<<grid, threads>>>(*point_d, VL_CONST, gamma_new, power);
             state_update_cuda<<<grid, threads>>>(*point_d, rk, euler, mach, theta, sum_res_sqr_d);
             cudaDeviceSynchronize();
-            sum_res_sqr = thrust::reduce(thrust::cuda::par.on(stream), sum_res_sqr_d, sum_res_sqr_d + max_points, 0.0);
+            sum_res_sqr = thrust::reduce(thrust::cuda::par.on(stream), sum_res_sqr_d, sum_res_sqr_d + max_points, (double) 0.0, thrust::plus<double>());
         }
 
         res_new = sqrt(sum_res_sqr) / max_points;

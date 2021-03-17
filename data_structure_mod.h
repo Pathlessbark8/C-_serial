@@ -34,8 +34,8 @@ struct points
 
   int xpos_nbhs[max_points], xneg_nbhs[max_points], ypos_nbhs[max_points], yneg_nbhs[max_points];
 
-  int xpos_conn[max_points][20], xneg_conn[max_points][20];
-  int ypos_conn[max_points][20], yneg_conn[max_points][20];
+  u_short xpos_conn[max_points][20], xneg_conn[max_points][20];
+  u_short ypos_conn[max_points][20], yneg_conn[max_points][20];
 
   double delta[max_points];
   double U_old[4][max_points + 1];
@@ -72,7 +72,7 @@ int format;
 // The parameter CFL is the CFL number for stability ..
 double CFL = 0.00001;
 
-int max_iters = 1000;
+int max_iters = 10;
 
 // Unsteady variables
 double t, tfinal, dtg;
