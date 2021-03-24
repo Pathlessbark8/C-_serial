@@ -2,7 +2,7 @@
 #include <vector>
 #include "parameter_mod.h"
 
-#define max_points 625000
+#define max_points 9600
 #define pi 3.141592653589793238462643383279502884
 
 int local_points, ghost_points;
@@ -70,9 +70,9 @@ int plen;
 int format;
 
 // The parameter CFL is the CFL number for stability ..
-double CFL = 0.00001;
+double CFL = 0.1;
 
-int max_iters = 10;
+int max_iters = 1000;
 
 // Unsteady variables
 double t, tfinal, dtg;
@@ -94,7 +94,7 @@ int power = 0;
 //    limiter_flag = 2 => min-max limiter
 
 int limiter_flag;
-double VL_CONST = 100; // Venkatakrishnan limiter constant ..
+double VL_CONST = 150; // Venkatakrishnan limiter constant ..
 
 int restart = 0;
 
